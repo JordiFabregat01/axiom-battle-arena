@@ -13,7 +13,7 @@ for (const file of ['.env.local', '.env']) {
   }
 }
 
-const url = env.VITE_SUPABASE_URL || env.SUPABASE_URL;
+const url = (env.VITE_SUPABASE_URL || env.SUPABASE_URL || '').trim().replace(/\/(rest|auth)\/v1\/?$/, '').replace(/\/+$/, '');
 const anon = env.VITE_SUPABASE_ANON_KEY;
 const service = env.SUPABASE_SERVICE_ROLE_KEY;
 let failed = 0;
