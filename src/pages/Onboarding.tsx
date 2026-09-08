@@ -67,7 +67,9 @@ export function Onboarding() {
       </form>
       <p className="faint" style={{ fontSize: '0.8rem' }}>
         {authoritative
-          ? 'Duels, packs and rewards are scored by the game server; your profile lives there.'
+          ? (configured && !user
+              ? <>Duels, packs and rewards are scored by the game server. Already have an account? <Link to="/account" className="cool">Sign in</Link> and your profile comes with you.</>
+              : 'Duels, packs and rewards are scored by the game server; your profile lives there.')
           : configured
             ? (user ? 'Your progress is saved to your account.' : <>Progress is saved in this browser until you <Link to="/account" className="cool">sign in</Link>; you can do that later and keep everything.</>)
             : 'Progress is saved in this browser. Teachers: students can each create a name on their own device.'}

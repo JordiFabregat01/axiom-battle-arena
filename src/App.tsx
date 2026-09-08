@@ -121,7 +121,7 @@ function Shell() {
   if (!profile && path.startsWith('/gallery')) return <div className="app"><Nav /><Gallery /><Footer /></div>;
   if (!profile && path.startsWith('/privacy')) return <div className="app"><Nav /><Privacy /><Footer /></div>;
   if (!profile && path.startsWith('/terms')) return <div className="app"><Nav /><Terms /><Footer /></div>;
-  if (!profile) return <div className="app"><Onboarding /><Footer /></div>;
+  if (!profile) return <div className="app"><Nav /><Onboarding /><Footer /></div>;
   return (
     <ArenaProvider>
       <div className="app">
