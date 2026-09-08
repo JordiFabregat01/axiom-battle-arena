@@ -99,7 +99,8 @@ export class SupabaseStore implements ProfileStore {
 }
 
 export async function createStore(): Promise<ProfileStore> {
-  const url = process.env.SUPABASE_URL;
+  // SUPABASE_URL is the server's own setting; VITE_SUPABASE_URL is accepted so one .env.local serves both sides locally.
+  const url = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (url && key) {
     console.log('[store] using Supabase');
