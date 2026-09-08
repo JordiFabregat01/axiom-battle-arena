@@ -20,7 +20,8 @@
     "pretypecheck": "node scripts/sync-cards.mjs",
     "cards:optimize": "node scripts/optimize-cards.mjs",
     "icons": "node scripts/icons.mjs",
-    "og": "node scripts/og-image.mjs"
+    "og": "node scripts/og-image.mjs",
+    "check:supabase": "node scripts/check-supabase.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
