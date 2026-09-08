@@ -44,9 +44,13 @@ export function OnlineProvider({ children }: { children: ReactNode }) {
         setError(null);
         setReady(true);
       } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : 'Could not sign in to the arena');
+        if (cancelled) return;
+        setError(e instanceof Error ? e.message : 'Could not sign in to the arena');
+        // The server may be mid-deploy or missing a table; keep trying while the socket is open.
+        retry = window.setTimeout(() => { if (!cancelled && socket.connected) void hello(); }, 5000);
       }
     };
+    let retry: number | undefined;
 
     const offStatus = socket.onStatus((s) => {
       setStatus(s);
@@ -64,7 +68,7 @@ export function OnlineProvider({ children }: { children: ReactNode }) {
     if (socket.connected) void hello();
     const keepalive = window.setInterval(() => { if (socket.connected) socket.send({ type: 'ping' }); }, 25_000);
 
-    return () => { cancelled = true; offStatus(); offMsg(); window.clearInterval(keepalive); };
+    return () => { cancelled = true; offStatus(); offMsg(); window.clearInterval(keepalive); window.clearTimeout(retry); };
   }, [dispatch, configured, user]);
 
   const value = useMemo<OnlineApi>(() => ({ enabled: onlineEnabled, status, ready, userId, error }), [status, ready, userId, error]);

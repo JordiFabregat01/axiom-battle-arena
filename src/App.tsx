@@ -121,6 +121,7 @@ function Shell() {
   if (!profile && path.startsWith('/gallery')) return <div className="app"><Nav /><Gallery /><Footer /></div>;
   if (!profile && path.startsWith('/privacy')) return <div className="app"><Nav /><Privacy /><Footer /></div>;
   if (!profile && path.startsWith('/terms')) return <div className="app"><Nav /><Terms /><Footer /></div>;
+  if (!profile && path.startsWith('/account')) return <div className="app"><Nav /><Account /><Footer /></div>;
   if (!profile) return <div className="app"><Nav /><Onboarding /><Footer /></div>;
   return (
     <ArenaProvider>
@@ -134,16 +135,22 @@ function Shell() {
   );
 }
 
-/** With a game server configured, nothing is shown until it has identified us and sent the profile. */
+const PUBLIC_PATHS = ['/account', '/gallery', '/privacy', '/terms'];
+
+/** With a game server configured, play waits until it has identified us and sent the profile.
+ *  Account and information pages stay reachable so a player can always sign in. */
 function OnlineGate({ children }: { children: React.ReactNode }) {
   const { ready, status, error } = useOnline();
-  if (ready) return <>{children}</>;
+  const { configured, user } = useAuth();
+  const { path } = useRoute();
+  if (ready || PUBLIC_PATHS.some((p) => path.startsWith(p))) return <>{children}</>;
   return (
     <div className="matchmaking">
       <div className="radar"><span>∑</span></div>
       <p className="eyebrow" style={{ animation: 'pulse 1.2s infinite' }}>{status === 'open' ? 'Signing in to the arena' : 'Connecting to the arena server'}</p>
       {error && <p className="notice">{error}</p>}
       {status === 'closed' && <p className="dim">The arena server is unreachable. Retrying…{import.meta.env.DEV && <> Start it with <code className="mono">npm run server</code>.</>}</p>}
+      {error && configured && !user && <a href="#/account" className="btn btn-chalk">Sign in with an account</a>}
     </div>
   );
 }
