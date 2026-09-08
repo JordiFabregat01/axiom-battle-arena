@@ -56,6 +56,9 @@ if (service && url) {
   const { error: rpc } = await admin.rpc('grant_coins', { p_user: '00000000-0000-0000-0000-000000000000', p_amount: 0 });
   if (!rpc) ok('grant_coins function callable by the server role');
   else bad(`grant_coins not callable: ${rpc.message}`, 'Re-run supabase/schema.sql (it grants execute to service_role)');
+  const { error: guests } = await admin.from('guest_profiles').select('id').limit(1);
+  if (!guests) ok('guest_profiles table exists (anonymous players can be saved)');
+  else bad(`guest_profiles table missing: ${guests.message}`, 'SQL editor → run supabase/migrations/20260909000000_guest_profiles.sql');
 } else {
   console.log('  · SUPABASE_SERVICE_ROLE_KEY not set locally: skipped the server-side checks (set it where the game server runs)');
 }

@@ -73,10 +73,19 @@ export class SupabaseStore implements ProfileStore {
   }
   get client() { return this.db; }
 
+  /** Accounts live in `profiles` (keyed by auth uuid); anonymous guests in `guest_profiles`. */
+  private table(userId: string) { return userId.startsWith('g-') ? 'guest_profiles' : 'profiles'; }
+
   async load(userId: string): Promise<Loaded> {
+    const none = { profile: null, entitlements: { plusUntil: null, coinGrants: 0 } };
+    if (this.table(userId) === 'guest_profiles') {
+      const { data, error } = await this.db.from('guest_profiles').select('data').eq('id', userId).maybeSingle();
+      if (error) throw new Error(`load failed: ${error.message}${/guest_profiles/.test(error.message) ? ' (run supabase/migrations/20260909000000_guest_profiles.sql)' : ''}`);
+      return data ? { profile: migrateProfile(data.data), entitlements: none.entitlements } : none;
+    }
     const { data, error } = await this.db.from('profiles').select('data, plus_until, coin_grants').eq('id', userId).maybeSingle();
     if (error) throw new Error(`load failed: ${error.message}`);
-    if (!data) return { profile: null, entitlements: { plusUntil: null, coinGrants: 0 } };
+    if (!data) return none;
     return {
       profile: migrateProfile(data.data),
       entitlements: { plusUntil: data.plus_until ? new Date(data.plus_until as string).getTime() : null, coinGrants: (data.coin_grants as number) ?? 0 },
@@ -84,15 +93,15 @@ export class SupabaseStore implements ProfileStore {
   }
   async save(userId: string, profile: Profile) {
     const row = { id: userId, name: profile.name, elo: profile.elo, level: levelFromXp(profile.xp).level, wins: totalWins(profile), data: profile, updated_at: new Date(profile.updatedAt).toISOString() };
-    const { error } = await this.db.from('profiles').upsert(row, { onConflict: 'id' });
+    const { error } = await this.db.from(this.table(userId)).upsert(row, { onConflict: 'id' });
     if (error) throw new Error(`save failed: ${error.message}`);
   }
   async remove(userId: string) {
-    const { error } = await this.db.from('profiles').delete().eq('id', userId);
+    const { error } = await this.db.from(this.table(userId)).delete().eq('id', userId);
     if (error) throw new Error(`remove failed: ${error.message}`);
   }
   async ladder(limit: number) {
-    const { data, error } = await this.db.from('profiles').select('id, name, elo, level, wins').order('elo', { ascending: false }).limit(limit);
+    const { data, error } = await this.db.from('ladder').select('id, name, elo, level, wins').order('elo', { ascending: false }).limit(limit);
     if (error) throw new Error(`ladder failed: ${error.message}`);
     return (data ?? []) as LadderRow[];
   }
