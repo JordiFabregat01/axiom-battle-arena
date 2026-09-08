@@ -1,0 +1,68 @@
+[
+  {
+    "id": "abyss-shark",
+    "file": "abyss-shark_L.jpg",
+    "rarity": "legendary",
+    "name": "Abyss Shark"
+  },
+  {
+    "id": "angry-alex",
+    "file": "angry-alex_E.jpg",
+    "rarity": "epic",
+    "name": "Angry Alex"
+  },
+  {
+    "id": "axel-the-axolotl",
+    "file": "axel-the-axolotl_R.jpg",
+    "rarity": "rare",
+    "name": "Axel the Axolotl"
+  },
+  {
+    "id": "carax-destroyer",
+    "file": "carax-destroyer_M.jpg",
+    "rarity": "mythic",
+    "name": "Carax Destroyer"
+  },
+  {
+    "id": "clean-capybara",
+    "file": "clean-capybara_U.jpg",
+    "rarity": "uncommon",
+    "name": "Clean Capybara"
+  },
+  {
+    "id": "desert-griffo",
+    "file": "desert-griffo_L.jpg",
+    "rarity": "legendary",
+    "name": "Desert Griffo"
+  },
+  {
+    "id": "oriel-the-absolute",
+    "file": "oriel-the-absolute_M.jpg",
+    "rarity": "mythic",
+    "name": "Oriel the Absolute"
+  },
+  {
+    "id": "scary-steve",
+    "file": "scary-steve_E.jpg",
+    "rarity": "epic",
+    "name": "Scary Steve"
+  },
+  {
+    "id": "sleepy-fox",
+    "file": "sleepy-fox_C.jpg",
+    "rarity": "common",
+    "name": "Sleepy Fox"
+  },
+  {
+    "id": "thaedus-the-tiger-deiety",
+    "file": "thaedus(the-tiger-deiety)_M.jpg",
+    "rarity": "mythic",
+    "name": "Thaedus (the Tiger Deiety)"
+  },
+  {
+    "id": "tundra-bear",
+    "file": "tundra-bear_L.jpg",
+    "rarity": "legendary",
+    "name": "Tundra Bear"
+  }
+]

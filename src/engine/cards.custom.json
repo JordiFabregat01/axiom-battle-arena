@@ -1,0 +1,14 @@
+{
+  "_readme": "Optional details for cards whose art lives in public/cards. Keys are card ids (the file name without its _X suffix, lower-case, dashes). Every field is optional: name, kind (beast | character), domain, symbol, flavor, power, rarity.",
+  "abyss-shark": { "kind": "beast", "domain": "Analysis", "symbol": "∫", "flavor": "Hunts in depths no number line reaches." },
+  "angry-alex": { "kind": "beast", "domain": "Logic", "symbol": "!", "flavor": "Has a bone to pick with every wrong answer." },
+  "axel-the-axolotl": { "kind": "beast", "domain": "Topology", "symbol": "∞", "flavor": "Regrows a limb for every proof it loses." },
+  "carax-destroyer": { "kind": "beast", "domain": "Number Theory", "symbol": "Ω", "flavor": "Leaves nothing but primes standing." },
+  "clean-capybara": { "kind": "beast", "domain": "Arithmetic", "symbol": "=", "flavor": "Tidies every equation it sits on." },
+  "desert-griffo": { "kind": "beast", "domain": "Geometry", "symbol": "△", "flavor": "Circles the dunes in perfect arcs." },
+  "oriel-the-absolute": { "kind": "character", "domain": "Infinity", "symbol": "ℵ", "flavor": "Sees the end of every sequence at once." },
+  "scary-steve": { "kind": "beast", "domain": "Probability", "symbol": "?", "flavor": "The odds are never in your favour." },
+  "sleepy-fox": { "kind": "beast", "domain": "Sequences", "symbol": "z", "flavor": "Counts sheep. Loses count. Starts again." },
+  "thaedus-the-tiger-deiety": { "name": "Thaedus, the Tiger Deity", "kind": "beast", "domain": "Infinity", "symbol": "✦", "flavor": "Wears the stars as stripes." },
+  "tundra-bear": { "kind": "beast", "domain": "Arithmetic", "symbol": "−", "flavor": "Counts the winters below zero." }
+}

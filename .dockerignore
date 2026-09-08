@@ -1,0 +1,12 @@
+node_modules
+dist
+server/dist
+server/data
+art
+public/cards/*.jpg
+public/cards/*.jpeg
+public/cards/*.png
+public/cards/*.webp
+.env*
+.git
+.claude
