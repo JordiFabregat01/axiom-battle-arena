@@ -44,6 +44,8 @@ try {
   const body = await res.json();
   if (res.ok && body.ok) ok('server is up'); else bad(`healthz answered ${res.status}`);
   if (body.store === 'supabase') ok('server stores profiles in Supabase'); else bad(`server store is "${body.store}"`, 'SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY missing on Railway');
+  if (body.packCards === undefined) console.log('  · server build predates the card count in /healthz');
+  else if (body.packCards > 0) ok(`server knows ${body.cards} cards (${body.packCards} in packs)`); else bad('server has no pack cards', 'cards.art.json was empty at build time; rebuild with public/cards present');
 } catch (e) { bad(`cannot reach ${server}/healthz: ${e.message}`, 'Is the Railway service running? Did you generate a domain on port 8787?'); }
 
 await new Promise((resolve) => {

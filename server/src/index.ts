@@ -21,6 +21,7 @@ import { createServer } from 'node:http';
 import { WebSocketServer } from 'ws';
 import { createStore, SupabaseStore } from './store';
 import { Hub } from './hub';
+import { CARDS, packableCards } from '../../src/engine/cards';
 
 const production = process.env.NODE_ENV === 'production';
 const host = process.env.HOST ?? '0.0.0.0';
@@ -34,6 +35,10 @@ if (production && store.kind === 'memory' && !flag('ALLOW_MEMORY_STORE')) {
   process.exit(1);
 }
 
+if (packableCards.length === 0) {
+  console.error('[arena] refusing to start: the card catalog has no pack cards. src/engine/cards.art.json is empty; run `npm run cards:sync` with the images present in public/cards and rebuild.');
+  process.exit(1);
+}
 const supabase = store instanceof SupabaseStore ? store.client : null;
 const allowGuests = supabase ? flag('ALLOW_GUESTS') : true;
 const allowImport = supabase ? flag('ALLOW_IMPORT') : true;
@@ -46,7 +51,7 @@ const hub = new Hub(store, { supabase, allowGuests, botAfterMs, allowImport });
 const http = createServer((req, res) => {
   if (req.method === 'GET' && (req.url === '/healthz' || req.url === '/')) {
     res.writeHead(200, { 'content-type': 'application/json', 'cache-control': 'no-store' });
-    res.end(JSON.stringify({ ok: true, store: store.kind, uptime: Math.round(process.uptime()), online: hub.size }));
+    res.end(JSON.stringify({ ok: true, store: store.kind, uptime: Math.round(process.uptime()), online: hub.size, cards: CARDS.length, packCards: packableCards.length }));
     return;
   }
   res.writeHead(404);

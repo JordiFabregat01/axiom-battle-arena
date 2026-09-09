@@ -6,7 +6,6 @@ art
 public/cards/*.jpg
 public/cards/*.jpeg
 public/cards/*.png
-public/cards/*.webp
 .env*
 .git
 .claude

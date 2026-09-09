@@ -59,8 +59,13 @@ export function syncCards({ log = true } = {}) {
     if (!prev || weight(e.file) > weight(prev.file)) byId.set(e.id, e);
   }
   const entries = [...byId.values()].sort((a, b) => a.id.localeCompare(b.id));
-  const next = JSON.stringify(entries, null, 2) + '\n';
   const prev = existsSync(OUT) ? readFileSync(OUT, 'utf8') : null;
+  // A build without the images (e.g. a Docker context that leaves art out) must not wipe the committed manifest.
+  if (entries.length === 0 && prev && prev.trim() !== '[]') {
+    if (log) console.log('[cards] no images in public/cards; keeping the existing cards.art.json');
+    return JSON.parse(prev);
+  }
+  const next = JSON.stringify(entries, null, 2) + '\n';
   if (prev !== next) {
     mkdirSync(dirname(OUT), { recursive: true });
     writeFileSync(OUT, next, 'utf8');
