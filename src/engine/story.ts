@@ -18,7 +18,7 @@ export interface QuestLine {
   id: string;
   title: string;
   tagline: string;
-  /** Card unlocked by clearing the final chapter. */
+  /** Card unlocked by clearing the final chapter (a `_Q` card in public/cards). */
   character: string;
   characterName: string;
   setting: string;
@@ -80,86 +80,87 @@ export const QUESTS: QuestLine[] = [
   },
   {
     id: 'clockwork-orchard',
-    title: 'The Clockwork Orchard',
-    tagline: 'A tin gardener whose trees grow in rows and harvest in tables.',
-    character: 'clockwork-gardener',
-    characterName: 'Tock',
-    setting: 'The Brass Terraces',
+    title: 'The Clockwork Oasis',
+    tagline: 'A dune wanderer who counts everything, and a brass orchard buried in the sand.',
+    character: 'clockwork',
+    characterName: 'Clockwork',
+    setting: 'The Singing Dunes',
     color: '#ffb347',
     chapters: [
-      ch('first-seeds', 'First Seeds', 1, [
-        { speaker: 'Tock', text: 'Tick. Good morning. I am Tock. I plant, I count, I water. Today I have too many seeds and not enough hands.' },
-        { speaker: 'Tock', text: 'Would you help me count them into the rows? Tock.' },
+      ch('first-footprints', 'First Footprints', 1, [
+        { speaker: 'Clockwork', text: 'They call me Clockwork because I count. Steps, stars, sips of water. Out here, losing count is how you die.' },
+        { speaker: 'Clockwork', text: 'I found something under the dunes: brass trees, in rows, still ticking. Help me count what the sand left us.' },
+        { speaker: YOU, text: 'Lead the way.' },
       ], [
-        { speaker: 'Tock', text: 'Every seed in its place. My gears are humming. Tick, tock, thank you.' },
+        { speaker: 'Clockwork', text: 'Good. Every seed accounted for. The desert respects a careful counter.' },
       ]),
-      ch('rows-and-rows', 'Rows and Rows', 2, [
-        { speaker: 'Tock', text: 'The trees grew overnight. Rows of them, all the same size. Counting one by one takes until winter.' },
-        { speaker: 'Tock', text: 'There must be a faster way. Multiplication, I think it is called. Show me.' },
+      ch('rows-of-brass', 'Rows of Brass', 2, [
+        { speaker: 'Clockwork', text: 'The trees stand in rows, each row the same. Counting one by one takes until the moon; I have watched the moon enough.' },
+        { speaker: 'Clockwork', text: 'Rows times trees. Show me the fast way and we drink before dark.' },
       ], [
-        { speaker: 'Tock', text: 'Rows times trees! I have written it on my chest plate so I never forget.' },
+        { speaker: 'Clockwork', text: 'Rows times trees. I have scratched it on my staff so the wind cannot take it.' },
       ]),
-      ch('broken-sprinkler', 'The Broken Sprinkler', 3, [
-        { speaker: 'Tock', text: 'The sprinkler broke and now some of the trees are dry. I need to know how many are still fine, and how much rope to fix the pipe.' },
-        { speaker: 'Tock', text: 'Numbers with several steps. My gears slip on those. Please.' },
+      ch('broken-channel', 'The Broken Channel', 3, [
+        { speaker: 'Clockwork', text: 'A water channel feeds the oasis and the sand has cracked it. Some trees are dry; some pipe still needs rope.' },
+        { speaker: 'Clockwork', text: 'Two steps at a time, counter. Crates and loose jars, rope and pieces.' },
       ], [
-        { speaker: 'Tock', text: 'The pipe is fixed and the dry trees are counted. Two steps at a time. I can do that now.' },
+        { speaker: 'Clockwork', text: 'Channel mended, dry trees counted. Two steps at a time. I can walk like that.' },
       ]),
-      ch('frost-night', 'The Frost Night', 4, [
-        { speaker: 'Tock', text: 'Frost is coming. The temperature falls below zero and I have never counted below zero before. Is that allowed?' },
-        { speaker: 'Tock', text: 'Help me plan the covers: percentages of trees, averages of nights, the number that makes the equation true.' },
+      ch('cold-night', 'The Cold Night', 4, [
+        { speaker: 'Clockwork', text: 'Deserts freeze at night. The number falls below nothing and keeps falling. I never had a word for that.' },
+        { speaker: 'Clockwork', text: 'Plan the covers with me: shares of the trees, averages of the nights, the number that makes the equation true.' },
       ], [
-        { speaker: 'Tock', text: 'Below zero is allowed. The orchard survived. So did I, mostly.' },
+        { speaker: 'Clockwork', text: 'Below nothing is allowed. The oasis lived through the cold. So did we.' },
       ]),
       ch('harvest-gear', 'The Harvest Gear', 5, [
-        { speaker: 'Tock', text: 'Harvest day. The great gear must be set so every basket fills evenly. My maker left the settings as riddles.' },
-        { speaker: 'Tock', text: 'Solve the riddles and the orchard runs itself. Then I could finally… rest. Tock.' },
+        { speaker: 'Clockwork', text: 'At the heart of the oasis is a great gear. Whoever built it left the settings as riddles, and the settings decide who eats.' },
+        { speaker: 'Clockwork', text: 'Solve them and the oasis runs itself. Then I can finally stop counting for one night.' },
       ], [
-        { speaker: 'Tock', text: 'The gear turns. The baskets fill. I am going to sit under a tree and do nothing for one whole minute.' },
-        { speaker: 'Tock', text: 'Before I do: take my card. A gardener should be in a good collection.' },
+        { speaker: 'Clockwork', text: 'The gear turns. The baskets fill. Tonight I count nothing at all.' },
+        { speaker: 'Clockwork', text: 'Take my card, counter. A wanderer should sit in a good collection.' },
       ]),
     ],
   },
   {
     id: 'star-charts',
-    title: 'Lyra’s Star Charts',
-    tagline: 'A cartographer mapping a sky that refuses to hold still.',
-    character: 'lyra-cartographer',
-    characterName: 'Lyra',
-    setting: 'The Observatory at Ninth Hill',
+    title: 'Lydia’s Star Charts',
+    tagline: 'A young cartographer mapping a sky that refuses to hold still.',
+    character: 'lydia',
+    characterName: 'Lydia',
+    setting: 'The Moonlit Battlements',
     color: '#3ee0c7',
     chapters: [
       ch('lantern-map', 'The Lantern Map', 3, [
-        { speaker: 'Lyra', text: 'I map stars for a living. Tonight the sky is cloudy, so I am mapping the lanterns of the city instead. Practice.' },
-        { speaker: 'Lyra', text: 'Count with me. Rows, crates, the ones the wind blew out.' },
+        { speaker: 'Lydia', text: 'I map stars for a living. Tonight the sky is cloudy, so I am mapping the lanterns of the city instead. Practice.' },
+        { speaker: 'Lydia', text: 'Count with me. Rows, crates, the ones the wind blew out.' },
       ], [
-        { speaker: 'Lyra', text: 'Neat. If you can count a city you can count a sky.' },
+        { speaker: 'Lydia', text: 'Neat. If you can count a city you can count a sky.' },
       ]),
       ch('angles-of-sky', 'Angles of the Sky', 4, [
-        { speaker: 'Lyra', text: 'Clear night. I measure the sky in squares and angles, and I need the perimeters and the areas to line up.' },
-        { speaker: 'Lyra', text: 'One wrong number and a constellation ends up in the sea.' },
+        { speaker: 'Lydia', text: 'Clear night. I measure the sky in squares and angles, and I need the perimeters and the areas to line up.' },
+        { speaker: 'Lydia', text: 'One wrong number and a constellation ends up in the sea.' },
       ], [
-        { speaker: 'Lyra', text: 'Everything lines up. The Swan stays in the sky where it belongs.' },
+        { speaker: 'Lydia', text: 'Everything lines up. The Swan stays in the sky where it belongs.' },
       ]),
       ch('comets-return', 'The Comet’s Return', 5, [
-        { speaker: 'Lyra', text: 'A comet comes back on a schedule. Two schedules, actually, and they only agree every so often.' },
-        { speaker: 'Lyra', text: 'Remainders, sums, differences. Find when they meet and I will know where to point the telescope.' },
+        { speaker: 'Lydia', text: 'A comet comes back on a schedule. Two schedules, actually, and they only agree every so often.' },
+        { speaker: 'Lydia', text: 'Remainders, sums, differences. Find when they meet and I will know where to point the staff.' },
       ], [
-        { speaker: 'Lyra', text: 'There it is. Right on the number you gave me. I could cry, but the lens would fog.' },
+        { speaker: 'Lydia', text: 'There it is. Right on the number you gave me. I could cry, but the crystal would fog.' },
       ]),
       ch('counting-constellations', 'Counting Constellations', 6, [
-        { speaker: 'Lyra', text: 'How many ways can you join stars into shapes? More than you would think. The atlas has a page for every one.' },
-        { speaker: 'Lyra', text: 'Choices, handshakes, diagonals. Combinatorics, the astronomers call it. I call it Tuesday.' },
+        { speaker: 'Lydia', text: 'How many ways can you join stars into shapes? More than you would think. The atlas has a page for every one.' },
+        { speaker: 'Lydia', text: 'Choices, handshakes, diagonals. Combinatorics, the astronomers call it. I call it Tuesday.' },
       ], [
-        { speaker: 'Lyra', text: 'The atlas has its page count. The printer will be furious.' },
+        { speaker: 'Lydia', text: 'The atlas has its page count. The printer will be furious.' },
       ]),
       ch('infinite-atlas', 'The Infinite Atlas', 7, [
-        { speaker: 'Lyra', text: 'The last page of the atlas is about things that do not end. Powers, divisors, paths through a grid of stars.' },
-        { speaker: 'Lyra', text: 'Finish it with me. Then I will draw you into the margin, which is where cartographers keep their friends.' },
+        { speaker: 'Lydia', text: 'The last page of the atlas is about things that do not end. Powers, divisors, paths through a grid of stars.' },
+        { speaker: 'Lydia', text: 'Finish it with me. Then I will draw you into the margin, which is where cartographers keep their friends.' },
         { speaker: YOU, text: 'Hand me the pen.' },
       ], [
-        { speaker: 'Lyra', text: 'Done. The atlas is complete, or as complete as an infinite thing gets.' },
-        { speaker: 'Lyra', text: 'My card is yours. Put me in your spotlight, and somewhere near the top; I like a view.' },
+        { speaker: 'Lydia', text: 'Done. The atlas is complete, or as complete as an infinite thing gets.' },
+        { speaker: 'Lydia', text: 'My card is yours. Put me in your spotlight, and somewhere near the top; I like a view.' },
       ]),
     ],
   },

@@ -10,6 +10,7 @@ Drop images here and they become cards. No code changes needed: the folder is sc
 
 - `<name>` becomes the card id (lower-case, dashes) and, unless overridden, the display name: `desert-griffo` → "Desert Griffo", `thaedus(the-tiger-deiety)` → "Thaedus (The Tiger Deiety)".
 - `<R>` is the rarity letter: **C** common · **U** uncommon · **R** rare · **E** epic · **L** legendary · **M** mythic · **S** singularity.
+- Exclusive letters make cards that never drop from packs: **Q** story quest reward (the card a quest line unlocks; its id is referenced in `src/engine/story.ts`), **X** season reward, **P** Plus membership. They count as legendary unless `cards.custom.json` says otherwise.
 - A file with no suffix whose name matches an existing card id (for example `euler.jpg`) just supplies art for that card.
 - Formats: JPG, PNG or WebP. Any size; **landscape works best** (the art window is 16:10). Subjects should sit in the middle; the sides are cropped on narrow cards. 1408×768 is fine; WebP at ~1000 px wide keeps pages fast.
 - White or transparent backgrounds are fine: the art sits on a light plate inside the card frame.

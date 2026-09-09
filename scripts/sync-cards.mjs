@@ -16,6 +16,8 @@ const ART_DIR = join(ROOT, 'public', 'cards');
 const OUT = join(ROOT, 'src', 'engine', 'cards.art.json');
 
 const RARITY_LETTERS = { C: 'common', U: 'uncommon', R: 'rare', E: 'epic', L: 'legendary', M: 'mythic', S: 'singularity' };
+/** Exclusive cards never drop from packs: Q = story quest reward, X = season reward, P = Plus membership. */
+const EXCLUSIVE_LETTERS = { Q: 'story', X: 'season', P: 'plus' };
 const EXT = /\.(jpe?g|png|webp)$/i;
 
 export function slugify(raw) {
@@ -38,13 +40,14 @@ export function humanize(raw) {
 export function parseArtFile(file) {
   if (!EXT.test(file)) return null;
   const base = file.replace(EXT, '');
-  const m = base.match(/^(.*?)(?:[_-]([CUuRrEeLlMmSs]))?$/);
+  const m = base.match(/^(.*?)(?:[_-]([CcUuRrEeLlMmSsQqXxPp]))?$/);
   const raw = m ? m[1] : base;
   const letter = m && m[2] ? m[2].toUpperCase() : null;
-  const rarity = letter ? RARITY_LETTERS[letter] ?? null : null;
+  const source = letter ? EXCLUSIVE_LETTERS[letter] ?? 'pack' : 'pack';
+  const rarity = letter ? RARITY_LETTERS[letter] ?? (source !== 'pack' ? 'legendary' : null) : null;
   const id = slugify(raw);
   if (!id) return null;
-  return { id, file, rarity, name: humanize(raw) };
+  return { id, file, rarity, source, name: humanize(raw) };
 }
 
 export function syncCards({ log = true } = {}) {
@@ -68,5 +71,5 @@ export function syncCards({ log = true } = {}) {
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const entries = syncCards();
-  for (const e of entries) console.log(`  ${e.id.padEnd(28)} ${(e.rarity ?? 'art only').padEnd(12)} ${e.file}`);
+  for (const e of entries) console.log(`  ${e.id.padEnd(28)} ${(e.rarity ?? 'art only').padEnd(12)} ${e.source === 'pack' ? '' : `${e.source} exclusive `}${e.file}`);
 }

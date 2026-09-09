@@ -1,68 +1,702 @@
 [
   {
-    "id": "abyss-shark",
-    "file": "abyss-shark_L.jpg",
-    "rarity": "legendary",
-    "name": "Abyss Shark"
-  },
-  {
-    "id": "angry-alex",
-    "file": "angry-alex_E.jpg",
+    "id": "alpha-wolf",
+    "file": "alpha-wolf_E.webp",
     "rarity": "epic",
-    "name": "Angry Alex"
+    "source": "pack",
+    "name": "Alpha Wolf"
   },
   {
-    "id": "axel-the-axolotl",
-    "file": "axel-the-axolotl_R.jpg",
+    "id": "amazon-anaconda",
+    "file": "amazon-anaconda_R.webp",
     "rarity": "rare",
-    "name": "Axel the Axolotl"
+    "source": "pack",
+    "name": "Amazon Anaconda"
   },
   {
-    "id": "carax-destroyer",
-    "file": "carax-destroyer_M.jpg",
-    "rarity": "mythic",
-    "name": "Carax Destroyer"
-  },
-  {
-    "id": "clean-capybara",
-    "file": "clean-capybara_U.jpg",
+    "id": "ant-eater",
+    "file": "ant-eater_U.webp",
     "rarity": "uncommon",
-    "name": "Clean Capybara"
+    "source": "pack",
+    "name": "Ant Eater"
   },
   {
-    "id": "desert-griffo",
-    "file": "desert-griffo_L.jpg",
-    "rarity": "legendary",
-    "name": "Desert Griffo"
-  },
-  {
-    "id": "oriel-the-absolute",
-    "file": "oriel-the-absolute_M.jpg",
-    "rarity": "mythic",
-    "name": "Oriel the Absolute"
-  },
-  {
-    "id": "scary-steve",
-    "file": "scary-steve_E.jpg",
-    "rarity": "epic",
-    "name": "Scary Steve"
-  },
-  {
-    "id": "sleepy-fox",
-    "file": "sleepy-fox_C.jpg",
+    "id": "armand-armadillo",
+    "file": "armand-armadillo_C.webp",
     "rarity": "common",
-    "name": "Sleepy Fox"
+    "source": "pack",
+    "name": "Armand Armadillo"
+  },
+  {
+    "id": "artic-caribou",
+    "file": "artic-caribou_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Artic Caribou"
+  },
+  {
+    "id": "artic-fox",
+    "file": "artic-fox_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Artic Fox"
+  },
+  {
+    "id": "artic-seal",
+    "file": "artic-seal_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Artic Seal"
+  },
+  {
+    "id": "axel-axolotl",
+    "file": "axel-axolotl_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Axel Axolotl"
+  },
+  {
+    "id": "beautiful-butterfly",
+    "file": "beautiful-butterfly_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Beautiful Butterfly"
+  },
+  {
+    "id": "bengal-tiger",
+    "file": "bengal-tiger_E.webp",
+    "rarity": "epic",
+    "source": "pack",
+    "name": "Bengal Tiger"
+  },
+  {
+    "id": "black-panther",
+    "file": "black-panther_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Black Panther"
+  },
+  {
+    "id": "black-widow",
+    "file": "black-widow_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Black Widow"
+  },
+  {
+    "id": "blessed-bat",
+    "file": "blessed-bat_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Blessed Bat"
+  },
+  {
+    "id": "blue-whale",
+    "file": "blue-whale_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Blue Whale"
+  },
+  {
+    "id": "bouncy-kangaroo",
+    "file": "bouncy-kangaroo_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Bouncy Kangaroo"
+  },
+  {
+    "id": "brutal-basilisk",
+    "file": "brutal-basilisk_L.webp",
+    "rarity": "legendary",
+    "source": "pack",
+    "name": "Brutal Basilisk"
+  },
+  {
+    "id": "carax-the-destroyer",
+    "file": "carax-the-destroyer_M.webp",
+    "rarity": "mythic",
+    "source": "pack",
+    "name": "Carax the Destroyer"
+  },
+  {
+    "id": "chameleon-kun",
+    "file": "chameleon-kun_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Chameleon Kun"
+  },
+  {
+    "id": "cheeky-chimpanze",
+    "file": "cheeky-chimpanze_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Cheeky Chimpanze"
+  },
+  {
+    "id": "chill-capybara",
+    "file": "chill-capybara_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Chill Capybara"
+  },
+  {
+    "id": "chinese-panda",
+    "file": "chinese-panda_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Chinese Panda"
+  },
+  {
+    "id": "chris-the-crab",
+    "file": "chris-the-crab_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Chris the Crab"
+  },
+  {
+    "id": "clingy-koala",
+    "file": "clingy-koala_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Clingy Koala"
+  },
+  {
+    "id": "clockwork",
+    "file": "clockwork_Q.webp",
+    "rarity": "legendary",
+    "source": "story",
+    "name": "Clockwork"
+  },
+  {
+    "id": "clucking-chicken",
+    "file": "clucking-chicken_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Clucking Chicken"
+  },
+  {
+    "id": "cruel-crocodile",
+    "file": "cruel-crocodile_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Cruel Crocodile"
+  },
+  {
+    "id": "crusing-clownfish",
+    "file": "crusing-clownfish_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Crusing Clownfish"
+  },
+  {
+    "id": "cute-cow",
+    "file": "cute-cow_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Cute Cow"
+  },
+  {
+    "id": "dave-the-donkey",
+    "file": "dave-the-donkey_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Dave the Donkey"
+  },
+  {
+    "id": "death",
+    "file": "death_S.webp",
+    "rarity": "singularity",
+    "source": "pack",
+    "name": "Death"
+  },
+  {
+    "id": "desert-camel",
+    "file": "desert-camel_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Desert Camel"
+  },
+  {
+    "id": "dolphin-daphne",
+    "file": "dolphin-daphne_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Dolphin Daphne"
+  },
+  {
+    "id": "electric-eel",
+    "file": "electric-eel_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Electric Eel"
+  },
+  {
+    "id": "elegant-eagle",
+    "file": "elegant-eagle_E.webp",
+    "rarity": "epic",
+    "source": "pack",
+    "name": "Elegant Eagle"
+  },
+  {
+    "id": "elegant-flamingo",
+    "file": "Elegant-Flamingo_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Elegant Flamingo"
+  },
+  {
+    "id": "eva-the-elephant",
+    "file": "eva-the-elephant_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Eva the Elephant"
+  },
+  {
+    "id": "forest-deer",
+    "file": "forest-deer_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Forest Deer"
+  },
+  {
+    "id": "freaky-froggo",
+    "file": "freaky-froggo_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Freaky Froggo"
+  },
+  {
+    "id": "free-falcon",
+    "file": "free-falcon_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Free Falcon"
+  },
+  {
+    "id": "geeked-giraffe",
+    "file": "geeked-giraffe_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Geeked Giraffe"
+  },
+  {
+    "id": "giant-squid",
+    "file": "giant-squid_L.webp",
+    "rarity": "legendary",
+    "source": "pack",
+    "name": "Giant Squid"
+  },
+  {
+    "id": "giggly-goat",
+    "file": "giggly-goat_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Giggly Goat"
+  },
+  {
+    "id": "godlike-ganesh",
+    "file": "Godlike-Ganesh_M.webp",
+    "rarity": "mythic",
+    "source": "pack",
+    "name": "Godlike Ganesh"
+  },
+  {
+    "id": "gorilla-family",
+    "file": "gorilla-family_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Gorilla Family"
+  },
+  {
+    "id": "hammerhead-leader",
+    "file": "hammerhead-leader_E.webp",
+    "rarity": "epic",
+    "source": "pack",
+    "name": "Hammerhead Leader"
+  },
+  {
+    "id": "happy-ferret",
+    "file": "happy-ferret_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Happy Ferret"
+  },
+  {
+    "id": "henry-the-hedgehog",
+    "file": "henry-the-hedgehog_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Henry the Hedgehog"
+  },
+  {
+    "id": "histeric-hippo",
+    "file": "histeric-hippo_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Histeric Hippo"
+  },
+  {
+    "id": "humble-ant",
+    "file": "humble-ant_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Humble Ant"
+  },
+  {
+    "id": "hysterical-hyena",
+    "file": "Hysterical_Hyena_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Hysterical Hyena"
+  },
+  {
+    "id": "imposing-moose",
+    "file": "imposing-moose_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Imposing Moose"
+  },
+  {
+    "id": "juliette-lemur",
+    "file": "juliette-lemur_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Juliette Lemur"
+  },
+  {
+    "id": "kawaii-kitty",
+    "file": "kawaii-kitty_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Kawaii Kitty"
+  },
+  {
+    "id": "komodo-dragon",
+    "file": "komodo-dragon_E.webp",
+    "rarity": "epic",
+    "source": "pack",
+    "name": "Komodo Dragon"
+  },
+  {
+    "id": "leon-the-lizard",
+    "file": "leon-the-lizard_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Leon the Lizard"
+  },
+  {
+    "id": "lion-jungle-king",
+    "file": "Lion(Jungle-King)_E.webp",
+    "rarity": "epic",
+    "source": "pack",
+    "name": "Lion (Jungle King)"
+  },
+  {
+    "id": "lydia",
+    "file": "lydia_Q.webp",
+    "rarity": "legendary",
+    "source": "story",
+    "name": "Lydia"
+  },
+  {
+    "id": "majestuous-peacock",
+    "file": "majestuous_peacock_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Majestuous Peacock"
+  },
+  {
+    "id": "menacing-cheetah",
+    "file": "menacing-cheetah_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Menacing Cheetah"
+  },
+  {
+    "id": "mighty-swordfish",
+    "file": "mighty-swordfish_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Mighty Swordfish"
+  },
+  {
+    "id": "neat-narwhal",
+    "file": "neat-narwhal_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Neat Narwhal"
+  },
+  {
+    "id": "northern-grizzly",
+    "file": "northern-grizzly_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Northern Grizzly"
+  },
+  {
+    "id": "oceanic-octopus",
+    "file": "oceanic-octopus_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Oceanic Octopus"
+  },
+  {
+    "id": "oceanic-stingray",
+    "file": "oceanic-stingray_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Oceanic Stingray"
+  },
+  {
+    "id": "orange-orangutan",
+    "file": "orange-orangutan_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Orange Orangutan"
+  },
+  {
+    "id": "orca-pack",
+    "file": "orca-pack_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Orca Pack"
+  },
+  {
+    "id": "otto-and-olga-otters",
+    "file": "otto-and-olga-otters_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Otto and Olga Otters"
+  },
+  {
+    "id": "pirry-platypus",
+    "file": "pirry-platypus_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Pirry Platypus"
+  },
+  {
+    "id": "plain-pigeon",
+    "file": "plain-pigeon_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Plain Pigeon"
+  },
+  {
+    "id": "pleased-piggy",
+    "file": "pleased-piggy_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Pleased Piggy"
+  },
+  {
+    "id": "polar-bear",
+    "file": "polar-bear_E.webp",
+    "rarity": "epic",
+    "source": "pack",
+    "name": "Polar Bear"
+  },
+  {
+    "id": "polen-bee",
+    "file": "polen-bee_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Polen Bee"
+  },
+  {
+    "id": "prehistoric-megalodon",
+    "file": "prehistoric-megalodon_L.webp",
+    "rarity": "legendary",
+    "source": "pack",
+    "name": "Prehistoric Megalodon"
+  },
+  {
+    "id": "prehistoric-t-rex",
+    "file": "prehistoric-t-rex_L.webp",
+    "rarity": "legendary",
+    "source": "pack",
+    "name": "Prehistoric T Rex"
+  },
+  {
+    "id": "reborn-phoenix",
+    "file": "reborn-phoenix_L.webp",
+    "rarity": "legendary",
+    "source": "pack",
+    "name": "Reborn Phoenix"
+  },
+  {
+    "id": "rickety-rino",
+    "file": "rickety-rino_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Rickety Rino"
+  },
+  {
+    "id": "ricky-the-rat",
+    "file": "ricky-the-rat_E.webp",
+    "rarity": "epic",
+    "source": "pack",
+    "name": "Ricky the Rat"
+  },
+  {
+    "id": "samurai-tanuki",
+    "file": "Samurai-Tanuki_L.webp",
+    "rarity": "legendary",
+    "source": "pack",
+    "name": "Samurai Tanuki"
+  },
+  {
+    "id": "savanah-buffalo",
+    "file": "savanah-buffalo_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Savanah Buffalo"
+  },
+  {
+    "id": "savanah-ostrich",
+    "file": "savanah-ostrich_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Savanah Ostrich"
+  },
+  {
+    "id": "savanah-zebra",
+    "file": "savanah-zebra_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Savanah Zebra"
+  },
+  {
+    "id": "scaly-emperor",
+    "file": "scaly-emperor_Q.webp",
+    "rarity": "legendary",
+    "source": "story",
+    "name": "Scaly Emperor"
+  },
+  {
+    "id": "secret-sea-horse",
+    "file": "secret-sea-horse_R.webp",
+    "rarity": "rare",
+    "source": "pack",
+    "name": "Secret Sea Horse"
+  },
+  {
+    "id": "shiba-taro",
+    "file": "shiba-taro_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Shiba Taro"
+  },
+  {
+    "id": "siberian-tiger",
+    "file": "siberian-tiger_E.webp",
+    "rarity": "epic",
+    "source": "pack",
+    "name": "Siberian Tiger"
+  },
+  {
+    "id": "silverback-gorilla",
+    "file": "silverback-gorilla_E.webp",
+    "rarity": "epic",
+    "source": "pack",
+    "name": "Silverback Gorilla"
+  },
+  {
+    "id": "sleepy-sloth",
+    "file": "sleepy-sloth_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Sleepy Sloth"
+  },
+  {
+    "id": "soothing-squirrel",
+    "file": "soothing-squirrel_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Soothing Squirrel"
+  },
+  {
+    "id": "tasmanian-devil",
+    "file": "tasmanian-devil_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Tasmanian Devil"
   },
   {
     "id": "thaedus-the-tiger-deiety",
-    "file": "thaedus(the-tiger-deiety)_M.jpg",
+    "file": "thaedus-the-tiger-deiety_M.webp",
     "rarity": "mythic",
-    "name": "Thaedus (the Tiger Deiety)"
+    "source": "pack",
+    "name": "Thaedus the Tiger Deiety"
   },
   {
-    "id": "tundra-bear",
-    "file": "tundra-bear_L.jpg",
+    "id": "the-last-griffin",
+    "file": "the-last-griffin_L.webp",
     "rarity": "legendary",
-    "name": "Tundra Bear"
+    "source": "pack",
+    "name": "The Last Griffin"
+  },
+  {
+    "id": "the-red-panda",
+    "file": "the-red-panda_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "The Red Panda"
+  },
+  {
+    "id": "thrilled-owl",
+    "file": "thrilled-owl_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Thrilled Owl"
+  },
+  {
+    "id": "tiamat",
+    "file": "tiamat_M.webp",
+    "rarity": "mythic",
+    "source": "pack",
+    "name": "Tiamat"
+  },
+  {
+    "id": "traveling-tortoise",
+    "file": "traveling-tortoise_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Traveling Tortoise"
+  },
+  {
+    "id": "trusty-horse",
+    "file": "trusty-horse_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Trusty Horse"
+  },
+  {
+    "id": "wandering-pinguin",
+    "file": "wandering-pinguin_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Wandering Pinguin"
+  },
+  {
+    "id": "whale-shark",
+    "file": "whale-shark_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Whale Shark"
+  },
+  {
+    "id": "wishing-bunny",
+    "file": "wishing-bunny_C.webp",
+    "rarity": "common",
+    "source": "pack",
+    "name": "Wishing Bunny"
+  },
+  {
+    "id": "wolf-pack",
+    "file": "wolf-pack_U.webp",
+    "rarity": "uncommon",
+    "source": "pack",
+    "name": "Wolf Pack"
   }
 ]

@@ -30,7 +30,7 @@ export const SEASON: Season = {
   start: '2026-09-01T00:00:00Z',
   end: '2026-12-01T00:00:00Z',
   featuredTopics: ['Prime numbers', 'Divisibility', 'Modular arithmetic'],
-  newCards: ['genesis-golem', 'scaly-emperor', 'sigma-sentinel'],
+  newCards: ['death', 'scaly-emperor', 'clockwork', 'lydia', 'genesis-golem', 'sigma-sentinel'],
   rewards: [
     { tierKey: 'bronze', standard: 1, premium: 0, coins: 200 },
     { tierKey: 'silver', standard: 2, premium: 0, coins: 400 },
