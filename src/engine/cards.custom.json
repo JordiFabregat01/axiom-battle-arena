@@ -3,8 +3,8 @@
 
   "death": { "name": "Death", "kind": "character", "domain": "Infinity", "symbol": "∅", "flavor": "Every sequence converges here. Only one in a hundred thousand ever meets it." },
 
-  "scaly-emperor": { "name": "Draconis, the Scaly Emperor", "kind": "beast", "domain": "Number Theory", "symbol": "♛", "flavor": "Every scale on his hide is a prime. He has counted." },
-  "clockwork": { "name": "Clockwork, the Dune Wanderer", "kind": "character", "domain": "Arithmetic", "symbol": "⚙", "flavor": "Counts steps, stars and sips of water. Out here, losing count is how you die." },
+  "scaly-emperor": { "name": "Draconis, the Scaly Emperor", "kind": "character", "domain": "Number Theory", "symbol": "♛", "flavor": "Lost the palace, kept the crown. Every scale on his hide is a prime; he has counted." },
+  "clockwork": { "name": "Clockwork, the Bound Automaton", "kind": "character", "domain": "Logic", "symbol": "⚙", "flavor": "Chained inside the broken hour. It counts every tick, because nobody else will." },
   "lydia": { "name": "Lydia, the Star Cartographer", "kind": "character", "domain": "Geometry", "symbol": "✧", "flavor": "Maps the sky one angle at a time, and keeps her friends in the margins." },
 
   "godlike-ganesh": { "name": "Godlike Ganesh", "kind": "character", "domain": "Infinity", "symbol": "∞", "flavor": "Removes obstacles. Divides by zero when nobody is looking." },
