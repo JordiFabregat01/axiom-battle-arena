@@ -4,8 +4,8 @@ import { Link } from '../router';
    the game is used by children through their teachers, which brings COPPA (US, under 13)
    and GDPR-K (EU, under 13–16 depending on the country) into play. */
 
-const OPERATOR = '[Your name or company]';
-const CONTACT = '[contact email]';
+const OPERATOR = 'AxiomBattleArena';
+const CONTACT = 'isimopuri@gmail.com';
 const UPDATED = '8 September 2026';
 
 export function Privacy() {
@@ -18,7 +18,7 @@ export function Privacy() {
       <h2>What we store</h2>
       <ul>
         <li><b>Guest play</b> stores nothing about you on our servers beyond a random guest id and your game profile (a display name you choose, ratings, cards, coins and match history). Nothing links it to a real person.</li>
-        <li><b>Accounts</b> add your email address (or the email and name your Google account shares when you sign in with Google) so you can return to the same profile from any device.</li>
+        <li><b>Accounts</b> add your email address so you can return to the same profile from any device.</li>
         <li><b>Purchases</b>, if enabled, are processed by Stripe. We never see or store card numbers; we keep the Stripe payment id and what was bought.</li>
       </ul>
 

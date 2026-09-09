@@ -36,7 +36,7 @@ if (url && anon) {
       ok('project reachable, anon key accepted');
       const ext = settings.external ?? {};
       if (ext.email) ok('Email sign-in enabled'); else bad('Email sign-in disabled', 'Authentication → Providers → Email → enable');
-      if (ext.google) ok('Google sign-in enabled'); else bad('Google sign-in not enabled (optional)', 'Authentication → Providers → Google → add client id/secret');
+      console.log(`  · Google sign-in ${ext.google ? 'enabled in Supabase' : 'off'} (not used by the app yet)`);
     } else bad(`auth endpoint answered ${res.status}`, 'Check the URL and anon key');
   } catch (e) { bad(`cannot reach ${url}: ${e.message}`); }
 

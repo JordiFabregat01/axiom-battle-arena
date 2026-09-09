@@ -21,7 +21,8 @@
     "cards:optimize": "node scripts/optimize-cards.mjs",
     "icons": "node scripts/icons.mjs",
     "og": "node scripts/og-image.mjs",
-    "check:supabase": "node scripts/check-supabase.mjs"
+    "check:supabase": "node scripts/check-supabase.mjs",
+    "check:deploy": "node scripts/check-deploy.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

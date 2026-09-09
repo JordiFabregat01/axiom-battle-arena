@@ -9,14 +9,13 @@ interface AuthApi {
   user: AuthUser | null;
   signInEmail: (email: string, password: string) => Promise<string | null>;
   signUpEmail: (email: string, password: string) => Promise<string | null>;
-  signInGoogle: () => Promise<string | null>;
   signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthApi>({
   configured: false, loading: false, user: null,
   signInEmail: async () => 'Accounts are not configured', signUpEmail: async () => 'Accounts are not configured',
-  signInGoogle: async () => 'Accounts are not configured', signOut: async () => {},
+  signOut: async () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -28,6 +27,7 @@ function toUser(u: { id: string; email?: string; user_metadata?: Record<string, 
   return { id: u.id, email: u.email ?? null, name };
 }
 
+/** Email + password accounts through Supabase. Other providers (Google, etc.) can be added here later. */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(cloudConfigured);
@@ -59,17 +59,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return null;
   }, []);
 
-  const signInGoogle = useCallback(async () => {
-    if (!supabase) return 'Accounts are not configured on this deployment.';
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
-    return error ? error.message : null;
-  }, []);
-
   const signOut = useCallback(async () => {
     if (!supabase) return;
     await supabase.auth.signOut();
   }, []);
 
-  const value = useMemo<AuthApi>(() => ({ configured: cloudConfigured, loading, user, signInEmail, signUpEmail, signInGoogle, signOut }), [loading, user, signInEmail, signUpEmail, signInGoogle, signOut]);
+  const value = useMemo<AuthApi>(() => ({ configured: cloudConfigured, loading, user, signInEmail, signUpEmail, signOut }), [loading, user, signInEmail, signUpEmail, signOut]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
