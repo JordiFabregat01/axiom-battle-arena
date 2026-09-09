@@ -29,7 +29,8 @@ const flag = (name: string) => process.env[name] === '1' || process.env[name] ==
 
 const store = await createStore();
 if (production && store.kind === 'memory' && !flag('ALLOW_MEMORY_STORE')) {
-  console.error('[arena] refusing to start: NODE_ENV=production without SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY. Profiles would vanish on restart. Set ALLOW_MEMORY_STORE=1 to override.');
+  console.error('[arena] refusing to start: NODE_ENV=production without SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY. Profiles would vanish on restart.');
+  console.error('[arena] Add those two variables in your host (Railway: service → Variables → Raw Editor) and it will restart by itself. See RELEASE.md step 2.');
   process.exit(1);
 }
 

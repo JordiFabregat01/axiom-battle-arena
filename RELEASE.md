@@ -35,8 +35,8 @@ GitHub may open a browser window to sign you in the first time. When the push fi
 
 1. Go to https://railway.app and sign in **with GitHub**.
 2. Click **New Project** → **Deploy from GitHub repo** → choose `axiom-arena`. (If it asks to "Configure GitHub App", allow access to that repository.)
-3. Railway starts building using the `Dockerfile`. Wait for the build to finish (2–3 minutes; the log ends with `listening on ws://0.0.0.0:8787`).
-4. Click the service box, open the **Variables** tab, click **Raw Editor**, paste exactly this and replace the two keys with the ones from Supabase → Project Settings → API (**service_role**, not anon):
+3. Railway creates a service and starts building it from the `Dockerfile`. The **first start will fail on purpose** with `refusing to start: NODE_ENV=production without SUPABASE_URL…` until the next step is done; that is the server protecting you from running without a database.
+4. Click the service box, open the **Variables** tab, click **Raw Editor**, paste exactly this and replace the key with the one from Supabase → Project Settings → API (**service_role**, not anon):
 
 ```
 NODE_ENV=production
@@ -47,7 +47,7 @@ ALLOW_GUESTS=1
 BOT_AFTER_MS=5000
 ```
 
-   Click **Update variables**. Railway redeploys automatically.
+   Click **Update variables**. Railway redeploys automatically; within a minute the log ends with `listening on ws://0.0.0.0:8787 · store supabase`.
 5. Open the **Settings** tab → **Networking** → **Generate Domain**. When it asks for a port, type `8787`. You get an address like `axiom-arena-production-1a2b.up.railway.app`. **Write it down; call it SERVER-DOMAIN.**
 6. Check it: open `https://SERVER-DOMAIN/healthz` in a browser. You must see `{"ok":true,"store":"supabase",…}`. If `store` says `memory`, the Supabase variables are wrong.
 
