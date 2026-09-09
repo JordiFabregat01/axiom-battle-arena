@@ -43,7 +43,10 @@ const supabase = store instanceof SupabaseStore ? store.client : null;
 const allowGuests = supabase ? flag('ALLOW_GUESTS') : true;
 const allowImport = supabase ? flag('ALLOW_IMPORT') : true;
 const botAfterMs = Number(process.env.BOT_AFTER_MS ?? 5000);
+/** Comma-separated origins; `*` matches any subdomain part, e.g. https://*--my-site.netlify.app (deploy previews). */
 const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? '').split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean);
+const originMatchers = allowedOrigins.map((o) => new RegExp(`^${o.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '[a-z0-9-]+')}$`, 'i'));
+const originAllowed = (origin: string) => originMatchers.some((m) => m.test(origin));
 if (production && allowedOrigins.length === 0) console.warn('[arena] ALLOWED_ORIGINS is empty: any website may open sockets to this server.');
 
 const hub = new Hub(store, { supabase, allowGuests, botAfterMs, allowImport });
@@ -64,7 +67,8 @@ const wss = new WebSocketServer({
   verifyClient: ({ origin }, done) => {
     if (allowedOrigins.length === 0) return done(true);
     const o = (origin ?? '').replace(/\/+$/, '');
-    done(allowedOrigins.includes(o), 403, 'Origin not allowed');
+    if (!originAllowed(o)) console.warn(`[arena] refused origin ${o || '(none)'}`);
+    done(originAllowed(o), 403, 'Origin not allowed');
   },
 });
 wss.on('connection', (ws) => hub.attach(ws));
