@@ -32,7 +32,7 @@ create policy "players update own profile"
 
 -- Clients may never change entitlements; the service role (webhooks) may.
 create or replace function public.protect_entitlements()
-returns trigger language plpgsql set search_path = '' as $
+returns trigger language plpgsql set search_path = '' as $$
 begin
   if auth.role() = 'authenticated' then
     new.plus_until := old.plus_until;
@@ -88,14 +88,14 @@ create policy "players see own purchases"
 
 -- Helpers used by the webhook (service role only).
 create or replace function public.grant_coins(p_user uuid, p_amount integer)
-returns void language sql security definer set search_path = '' as $
+returns void language sql security definer set search_path = '' as $$
   update public.profiles set coin_grants = coin_grants + p_amount where id = p_user;
 $$;
 revoke all on function public.grant_coins(uuid, integer) from public, anon, authenticated;
 grant execute on function public.grant_coins(uuid, integer) to service_role;
 
 create or replace function public.set_plus(p_user uuid, p_until timestamptz, p_customer text)
-returns void language sql security definer set search_path = '' as $
+returns void language sql security definer set search_path = '' as $$
   update public.profiles
     set plus_until = greatest(coalesce(plus_until, p_until), p_until),
         stripe_customer_id = coalesce(p_customer, stripe_customer_id)
