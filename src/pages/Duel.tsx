@@ -80,12 +80,29 @@ function DuelScreen({ mode, tier, c }: { mode: DuelMode; tier: number | null; c:
   }
 
   if (c.stage === 'searching') {
+    const q = c.queue;
+    const band = q?.band;
     return (
       <div className="page matchmaking">
         <div className="radar"><span>{mode === 'ranked' ? profile.elo : tier}</span></div>
-        <p className="eyebrow" style={{ animation: 'pulse 1.2s infinite' }}>{mode === 'ranked' ? `Searching near ${profile.elo} elo` : `Finding a ${tierById(tier ?? 1).name} sparring partner`}</p>
-        <p className="dim">{modeLabel}{onlineEnabled ? ' · live matchmaking' : ''}</p>
-        <Link to="/play" className="btn btn-ghost btn-sm">Cancel</Link>
+        <p className="eyebrow" style={{ animation: 'pulse 1.2s infinite' }}>
+          {mode === 'ranked'
+            ? (band == null ? `Searching for any opponent` : `Searching ${profile.elo - band}–${profile.elo + band} elo`)
+            : `Finding a ${tierById(tier ?? 1).name} sparring partner`}
+        </p>
+        <p className="dim">{modeLabel}{onlineEnabled ? (mode === 'ranked' ? ' · real players only' : ' · live matchmaking') : ''}</p>
+        {q && (
+          <p className="mono dim" style={{ fontSize: '0.85rem' }}>
+            {q.seconds}s · {q.waiting === 0 ? 'nobody else in this queue yet' : `${q.waiting} other${q.waiting === 1 ? '' : 's'} in queue`} · {q.online} online
+          </p>
+        )}
+        {q && mode === 'ranked' && q.seconds >= 30 && q.waiting === 0 && (
+          <p className="notice" style={{ maxWidth: 480 }}>No one else is queued for ranked right now. Keep waiting (the rating window keeps widening), invite a friend to queue, or play a casual duel meanwhile.</p>
+        )}
+        <div className="row">
+          <Link to="/play" className="btn btn-ghost btn-sm">Cancel</Link>
+          {mode === 'ranked' && q && q.seconds >= 30 && q.waiting === 0 && <Link to={`/duel?mode=casual&tier=${profile.placement}&n=${Date.now().toString(36)}`} className="btn btn-sm">Casual instead</Link>}
+        </div>
       </div>
     );
   }

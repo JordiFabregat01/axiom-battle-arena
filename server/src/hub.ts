@@ -18,10 +18,17 @@ import { validateName } from '../../src/engine/names';
 import type { ClientMessage, DuelMode } from '../../src/shared/protocol';
 
 export interface HubConfig extends AuthConfig {
-  /** Fall back to a bot opponent after waiting this long (ms). */
+  /** Casual: fall back to a bot opponent after waiting this long (ms). */
   botAfterMs: number;
+  /** Ranked: allow bot opponents at all. Off by default: ranked is real players only. */
+  rankedBots: boolean;
   /** Let players bring a guest-mode save into a fresh account (development / migration only). */
   allowImport: boolean;
+}
+
+/** Ranked rating window: ±100 at first, widening 40 points per second, any opponent after a minute. */
+export function rankedBand(waitedSeconds: number): number | null {
+  return waitedSeconds >= 60 ? null : Math.min(2000, Math.round(100 + 40 * waitedSeconds));
 }
 
 export class Hub {
@@ -199,23 +206,32 @@ export class Hub {
       if (taken.has(s)) continue;
       const q = s.queue!;
       const waited = (now - q.since) / 1000;
+      // Humans first: same mode, and for ranked a rating window that grows the longer either side has waited.
       const partner = waiting.find((o) => {
         if (o === s || taken.has(o) || o.queue!.mode !== q.mode) return false;
+        if (o.userId && o.userId === s.userId) return false;
         if (q.mode === 'casual') return o.queue!.tier === q.tier;
-        const band = Math.min(600, 100 + 40 * Math.max(waited, (now - o.queue!.since) / 1000));
-        return Math.abs(o.profile!.elo - s.profile!.elo) <= band;
+        const band = rankedBand(Math.max(waited, (now - o.queue!.since) / 1000));
+        return band === null || Math.abs(o.profile!.elo - s.profile!.elo) <= band;
       });
       if (partner) {
         taken.add(s); taken.add(partner);
         this.createRoom(q.mode, q.tier, s, partner);
-      } else if (waited * 1000 >= this.cfg.botAfterMs) {
+        continue;
+      }
+      // Bots: casual after a short wait; ranked only if explicitly allowed (it is not, by default).
+      const botsAllowed = q.mode === 'casual' || this.cfg.rankedBots;
+      if (botsAllowed && waited * 1000 >= this.cfg.botAfterMs) {
         taken.add(s);
         const rng = mulberry32(newSeed());
         const bot = q.mode === 'ranked'
           ? opponentForRanked(s.profile!.elo, rng)
           : opponentForCasual(s.profile!.elo, q.tier != null ? s.profile!.tierStats[q.tier] : undefined, rng);
         this.createRoom(q.mode, q.tier, s, bot);
+        continue;
       }
+      const others = waiting.filter((o) => o !== s && !taken.has(o) && o.queue!.mode === q.mode).length;
+      s.send({ type: 'queue_status', mode: q.mode, waiting: others, online: this.sessions.size, seconds: Math.round(waited), band: q.mode === 'ranked' ? rankedBand(waited) : null, botsAllowed });
     }
   }
 

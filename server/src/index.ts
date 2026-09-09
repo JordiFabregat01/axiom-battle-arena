@@ -12,7 +12,8 @@
  *    ALLOW_GUESTS=1             with Supabase, also accept anonymous guest ids
  *    ALLOW_IMPORT=1             with Supabase, let a fresh account import a guest-mode save once
  *    ALLOW_MEMORY_STORE=1       let NODE_ENV=production start without Supabase (not recommended)
- *    BOT_AFTER_MS               matchmaking waits this long for a human before spawning a bot (default 5000)
+ *    BOT_AFTER_MS               casual matchmaking waits this long for a human before spawning a bot (default 5000)
+ *    RANKED_BOTS=1              also let ranked fall back to bots (default: ranked is real players only)
  *    DATA_FILE                  where the in-memory store mirrors itself (default server/data/profiles.json)
  *
  *  HTTP GET /healthz answers {"ok":true} for load balancers; everything else is WebSocket.
@@ -43,13 +44,14 @@ const supabase = store instanceof SupabaseStore ? store.client : null;
 const allowGuests = supabase ? flag('ALLOW_GUESTS') : true;
 const allowImport = supabase ? flag('ALLOW_IMPORT') : true;
 const botAfterMs = Number(process.env.BOT_AFTER_MS ?? 5000);
+const rankedBots = flag('RANKED_BOTS');
 /** Comma-separated origins; `*` matches any subdomain part, e.g. https://*--my-site.netlify.app (deploy previews). */
 const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? '').split(',').map((s) => s.trim().replace(/\/+$/, '')).filter(Boolean);
 const originMatchers = allowedOrigins.map((o) => new RegExp(`^${o.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '[a-z0-9-]+')}$`, 'i'));
 const originAllowed = (origin: string) => originMatchers.some((m) => m.test(origin));
 if (production && allowedOrigins.length === 0) console.warn('[arena] ALLOWED_ORIGINS is empty: any website may open sockets to this server.');
 
-const hub = new Hub(store, { supabase, allowGuests, botAfterMs, allowImport });
+const hub = new Hub(store, { supabase, allowGuests, botAfterMs, rankedBots, allowImport });
 
 const http = createServer((req, res) => {
   if (req.method === 'GET' && (req.url === '/healthz' || req.url === '/')) {
@@ -74,7 +76,7 @@ const wss = new WebSocketServer({
 wss.on('connection', (ws) => hub.attach(ws));
 
 http.listen(port, host, () => {
-  console.log(`[arena] listening on ws://${host}:${port} · store ${store.kind} · guests ${allowGuests ? 'allowed' : 'disabled'} · import ${allowImport ? 'allowed' : 'disabled'} · bot fallback ${botAfterMs}ms · origins ${allowedOrigins.length ? allowedOrigins.join(', ') : 'any'}`);
+  console.log(`[arena] listening on ws://${host}:${port} · store ${store.kind} · guests ${allowGuests ? 'allowed' : 'disabled'} · import ${allowImport ? 'allowed' : 'disabled'} · casual bot after ${botAfterMs}ms · ranked ${rankedBots ? 'allows bots' : 'humans only'} · origins ${allowedOrigins.length ? allowedOrigins.join(', ') : 'any'}`);
 });
 
 const shutdown = () => {

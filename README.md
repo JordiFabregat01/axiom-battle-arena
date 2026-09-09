@@ -16,7 +16,7 @@ npm run dev        # web app on http://localhost:5173 (terminal 2)
 
 | | Guest mode (no server) | Server mode (`VITE_ARENA_WS_URL` set) |
 | --- | --- | --- |
-| Opponents | Simulated in the browser | Live players matched by rating, bot fallback after a few seconds |
+| Opponents | Simulated in the browser | Live players matched by rating. Casual falls back to a bot after a few seconds; ranked is real players only |
 | Questions, clock, scoring | Browser | **Server** (the client only sends guesses; answers are never sent to it) |
 | Elo, XP, packs, coins, story rewards | Browser reducer | **Server**, same reducer, then persisted |
 | Profile storage | localStorage (or Supabase cloud sync when signed in) | Server store: JSON file in development, Supabase in production |
@@ -67,9 +67,10 @@ scripts/           e2e.mjs (headless-browser + server checks), art-brief.mjs
 | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | persist profiles in Supabase and verify sign-in tokens. Without them: in-memory store mirrored to `server/data/profiles.json`, guests allowed |
 | `ALLOW_GUESTS=1` | with Supabase, also accept anonymous guest ids (development) |
 | `ALLOW_IMPORT=1` | with Supabase, let a fresh account import a guest-mode save once (migration) |
-| `BOT_AFTER_MS` | matchmaking waits this long for a human before spawning a bot (default 5000) |
+| `BOT_AFTER_MS` | casual matchmaking waits this long for a human before spawning a bot (default 5000) |
+| `RANKED_BOTS=1` | also let ranked fall back to bots. Off by default: ranked pairs real players only, with a rating window of ±100 that widens 40 points per second and opens to anyone after a minute |
 
-How a duel works in server mode: the client sends `queue`; the server pairs players within ±100 Elo (widening 40/s) or spawns a bot; the room generates the shared question sequence from a secret seed, sends one question at a time, timestamps every answer on its own clock, applies penalties and streak bonuses, ends the duel at 60 s, settles Elo/XP/pack progress with `settleDuel`, saves, and sends `match_end`. Answers faster than 350 ms get no extra speed bonus. Story chapters and pack openings follow the same pattern (`story_start`/`story_answer`, `open_pack`).
+How a duel works in server mode: the client sends `queue`; the server pairs players within ±100 Elo (widening 40/s; casual spawns a bot after `BOT_AFTER_MS`, ranked waits for a human); the room generates the shared question sequence from a secret seed, sends one question at a time, timestamps every answer on its own clock, applies penalties and streak bonuses, ends the duel at 60 s, settles Elo/XP/pack progress with `settleDuel`, saves, and sends `match_end`. Answers faster than 350 ms get no extra speed bonus. Story chapters and pack openings follow the same pattern (`story_start`/`story_answer`, `open_pack`).
 
 Deploy the server anywhere that runs Node 20+ with WebSockets (Railway, Fly.io, Render, a VPS) and set `VITE_ARENA_WS_URL=wss://…` for the web build. Once deployed, run the two `drop policy` lines noted in `supabase/schema.sql` so browsers can no longer write profiles directly.
 

@@ -198,11 +198,40 @@ async function testDuel() {
   c.close();
 }
 
+// ─────────────────────────────────────────────────────────── 4. Ranked pairs real players, never bots
+async function testRankedHumans() {
+  console.log('\nRanked matchmaking pairs real players');
+  const a = await connect();
+  const b = await connect();
+  for (const [c, tag] of [[a, 'A'], [b, 'B']]) {
+    c.send({ type: 'hello', guestId: `g-rank${tag.toLowerCase()}${Math.random().toString(36).slice(2, 12)}`, reqId: 'h' });
+    await c.next((m) => m.type === 'welcome');
+    c.send({ type: 'intent', action: { type: 'create', name: `Rank${tag}${rnd()}`, placement: 3 }, reqId: 'c' });
+    await c.next((m) => m.reqId === 'c');
+  }
+  // Alone in the ranked queue: no bot appears, and the status says so.
+  a.send({ type: 'queue', mode: 'ranked' });
+  await a.next((m) => m.type === 'queued');
+  const status = await a.next((m) => m.type === 'queue_status', 3000);
+  assert(status.waiting === 0 && status.botsAllowed === false, 'lone ranked player sees an empty queue and no bot fallback');
+  let botMatch = null;
+  try { botMatch = await a.next((m) => m.type === 'match', 2500); } catch { /* expected: nobody to match */ }
+  assert(botMatch === null, 'no bot is spawned for a lone ranked player');
+  // A second player joins: they are paired with each other.
+  b.send({ type: 'queue', mode: 'ranked' });
+  const [ma, mb] = await Promise.all([a.next((m) => m.type === 'match', 5000), b.next((m) => m.type === 'match', 5000)]);
+  assert(ma.matchId === mb.matchId && ma.opponent.isBot === false && mb.opponent.isBot === false, `two ranked players matched with each other (${ma.opponent.name} vs ${mb.opponent.name})`);
+  const [pa, pb] = await Promise.all([a.next((m) => m.type === 'problem', 12000), b.next((m) => m.type === 'problem', 12000)]);
+  assert(pa.text === pb.text, 'both players received the same first question');
+  a.close(); b.close();
+}
+
 const server = await startServer();
 try {
   await testEscape();
   await testTamper();
   await testDuel();
+  await testRankedHumans();
 } finally {
   server.kill();
   await sleep(200);

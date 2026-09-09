@@ -25,9 +25,13 @@ export interface Outcome {
   demoted: string | null;
 }
 
+export interface QueueInfo { waiting: number; online: number; seconds: number; band: number | null; botsAllowed: boolean; }
+
 export interface DuelController {
   stage: Stage;
   opponent: OpponentInfo | null;
+  /** Live matchmaking info while searching (server mode only). */
+  queue: QueueInfo | null;
   countdown: number;
   timeLeft: number;
   problem: ProblemView | null;
@@ -88,7 +92,7 @@ export function useLocalDuel(mode: DuelMode, tier: number | null): DuelControlle
   const opponent: OpponentInfo = { name: config.opponent.name, elo: config.opponent.elo, level: config.opponent.level, spotlight: config.opponent.spotlight, isBot: true };
 
   return {
-    stage, opponent, countdown: duel.countdown, timeLeft: duel.timeLeft,
+    stage, opponent, queue: null, countdown: duel.countdown, timeLeft: duel.timeLeft,
     problem: duel.problem ? { text: duel.problem.text, hint: duel.problem.hint, tier: duel.problem.tier } : null,
     me: duel.me, opp: duel.bot, flash: duel.flash, outcome, error: null,
     submit: (raw) => { duel.submit(raw); },
@@ -108,6 +112,7 @@ export function useRemoteDuel(mode: DuelMode, tier: number | null): DuelControll
   const [flash, setFlash] = useState<Flash | null>(null);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [queue, setQueue] = useState<QueueInfo | null>(null);
   const matchId = useRef<string | null>(null);
   const startsAt = useRef(0);
   const meRef = useRef<SideState>(emptySide());
@@ -118,6 +123,9 @@ export function useRemoteDuel(mode: DuelMode, tier: number | null): DuelControll
     if (!socket) { setError('No game server configured'); return; }
     const off = socket.on((msg: ServerMessage) => {
       switch (msg.type) {
+        case 'queue_status':
+          if (!matchId.current) setQueue({ waiting: msg.waiting, online: msg.online, seconds: msg.seconds, band: msg.band, botsAllowed: msg.botsAllowed });
+          break;
         case 'match':
           matchId.current = msg.matchId;
           startsAt.current = msg.startsAt;
@@ -187,7 +195,7 @@ export function useRemoteDuel(mode: DuelMode, tier: number | null): DuelControll
     socket.send({ type: 'skip', matchId: matchId.current, index: meRef.current.index });
   };
 
-  return { stage, opponent, countdown, timeLeft, problem, me, opp, flash, outcome, error, submit, skip };
+  return { stage, opponent, queue, countdown, timeLeft, problem, me, opp, flash, outcome, error, submit, skip };
 }
 
 export const myOpponentInfo = (name: string, elo: number, xp: number, spotlight: string[]): OpponentInfo =>

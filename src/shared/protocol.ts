@@ -44,6 +44,8 @@ export type ServerMessage =
   | { type: 'profile'; profile: Profile | null; reqId?: string }
   | { type: 'error'; message: string; reqId?: string }
   | { type: 'queued'; mode: DuelMode; tier: number | null }
+  /** Sent every matcher tick while waiting: who else is queued in this mode and how wide the rating search has grown. */
+  | { type: 'queue_status'; mode: DuelMode; waiting: number; online: number; seconds: number; band: number | null; botsAllowed: boolean }
   | { type: 'match'; matchId: string; mode: DuelMode; tier: number | null; opponent: OpponentInfo; startsAt: number; endsAt: number }
   | { type: 'problem'; matchId: string; index: number; text: string; hint: string; tier: number }
   | { type: 'answer_result'; matchId: string; index: number; correct: boolean; skipped: boolean; points: number; streakBonus: boolean; me: SideState }
