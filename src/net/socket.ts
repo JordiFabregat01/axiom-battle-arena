@@ -91,7 +91,16 @@ export class ArenaSocket {
   }
 }
 
-export const ARENA_WS_URL = import.meta.env.VITE_ARENA_WS_URL as string | undefined;
+/** Accepts the address however it was typed: `wss://https://host`, `https://host`, `host/`, … */
+function normalizeWsUrl(raw: string | undefined): string | undefined {
+  let u = (raw ?? '').trim().replace(/\/+$/, '');
+  if (!u) return undefined;
+  let secure = /^wss:|^https:/i.test(u) || !/^(ws|http):/i.test(u);
+  u = u.replace(/^(?:(?:wss?|https?):\/\/)+/i, '');
+  if (/^(localhost|127\.0\.0\.1)(:|$)/i.test(u) && !/^wss:|^https:/i.test(raw ?? '')) secure = false;
+  return `${secure ? 'wss' : 'ws'}://${u}`;
+}
+export const ARENA_WS_URL = normalizeWsUrl(import.meta.env.VITE_ARENA_WS_URL as string | undefined);
 /** True when this build talks to a game server (authoritative mode). */
 export const onlineEnabled = !!ARENA_WS_URL;
 export const arenaSocket: ArenaSocket | null = ARENA_WS_URL ? new ArenaSocket(ARENA_WS_URL) : null;
