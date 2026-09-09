@@ -306,6 +306,15 @@ export function reducer(state: Profile | null, action: Action): Profile | null {
   }
 }
 
+/** Drop collection entries and spotlight slots that point at cards no longer in the catalog (e.g. removed test art). */
+export function pruneUnknownCards(p: Profile, known: ReadonlySet<string>): Profile {
+  const stale = Object.keys(p.collection).some((id) => !known.has(id)) || p.spotlight.some((id) => !known.has(id));
+  if (!stale) return p;
+  const collection: Record<string, number> = {};
+  for (const [id, n] of Object.entries(p.collection)) if (known.has(id)) collection[id] = n;
+  return { ...p, collection, spotlight: p.spotlight.filter((id) => known.has(id)), updatedAt: Date.now() };
+}
+
 export const totalWins = (p: Profile) => p.casualWins + p.rankedWins;
 export const totalGames = (p: Profile) => p.casualWins + p.casualLosses + p.rankedWins + p.rankedLosses + p.draws;
 export const ownedCount = (p: Profile) => Object.values(p.collection).filter((n) => n > 0).length;

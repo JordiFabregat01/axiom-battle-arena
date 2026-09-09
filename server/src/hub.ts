@@ -4,8 +4,10 @@ import { Session } from './session';
 import { Room } from './room';
 import { identify, type AuthConfig } from './auth';
 import type { ProfileStore } from './store';
-import { reducer, createProfile, migrateProfile, monthKey, type ClientIntent, type Profile } from '../../src/engine/profile';
-import { PACKS, openPack, type PackId } from '../../src/engine/cards';
+import { reducer, createProfile, migrateProfile, monthKey, pruneUnknownCards, type ClientIntent, type Profile } from '../../src/engine/profile';
+import { CARDS, PACKS, openPack, type PackId } from '../../src/engine/cards';
+
+const KNOWN_CARDS: ReadonlySet<string> = new Set(CARDS.map((c) => c.id));
 import { mulberry32, newSeed, clamp } from '../../src/engine/rng';
 import { opponentForCasual, opponentForRanked } from '../../src/engine/bots';
 import { SEASON, seasonTimeLeft, rewardForElo } from '../../src/engine/season';
@@ -110,8 +112,9 @@ export class Hub {
     const loaded = await this.store.load(identity.id);
     let profile = loaded.profile;
     if (profile) {
-      const merged = reducer(profile, { type: 'applyServer', plusUntil: loaded.entitlements.plusUntil, coinGrants: loaded.entitlements.coinGrants });
-      if (merged && merged !== profile) { profile = merged; await this.store.save(identity.id, merged); }
+      let next = reducer(profile, { type: 'applyServer', plusUntil: loaded.entitlements.plusUntil, coinGrants: loaded.entitlements.coinGrants }) ?? profile;
+      next = pruneUnknownCards(next, KNOWN_CARDS);
+      if (next !== profile) { profile = next; await this.store.save(identity.id, next); }
     }
     session.profile = profile;
     session.send({ type: 'welcome', serverTime: Date.now(), profile, userId: identity.id, reqId: msg.reqId });
