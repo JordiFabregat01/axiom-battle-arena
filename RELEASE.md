@@ -108,6 +108,11 @@ It confirms the site is up, that it was built with the right server address and 
 
 ---
 
+## Already done for the current deployment
+
+- Email confirmation is **off** in Supabase (Authentication → Sign In / Providers → Confirm email), so sign-ups work without the built-in mailer. Turn it back on only after connecting a real mailer (Authentication → SMTP settings, e.g. Resend).
+- Run `supabase/migrations/20260909300000_unique_names.sql` once: it makes usernames unique (case-insensitive). The game server already enforces the username rules (3–16 characters, letters/numbers/underscores, starts with a letter, no reserved or offensive words) and uniqueness before every sign-up and rename.
+
 ## Later, whenever you want
 
 - **Your own domain** (e.g. `axiomarena.com`): buy it anywhere, then Netlify → **Domain management** → **Add a domain**; follow its DNS instructions. Afterwards update `ALLOWED_ORIGINS` on Railway and the Supabase Site URL to the new address.

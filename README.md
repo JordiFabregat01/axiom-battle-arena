@@ -39,7 +39,8 @@ Both modes share `src/engine/` (rules), so results are identical.
 | **Cards** | 110 cards, 105 in packs across 7 rarities plus season, story and Plus exclusives. Every card prints its exact pull odds ("1 in 58" to "1 in 100,000"). |
 | **Splash art** | Drop `public/cards/<name>_<R>.jpg` (R = rarity letter C/U/R/E/L/M/S) and the file becomes a card, or art for an existing card if the name matches its id. Landscape images, 16:10 window, light plate. Details per card in `src/engine/cards.custom.json`; the folder is synced to `cards.art.json` automatically. The `#/gallery` page shows every card unlocked. `npm run art-brief` writes prompts for cards without art. |
 | **Axiom Plus** | $5/month: 8 spotlight slots, monthly Prime Pack + 600 coins, the Sigma Sentinel card, a Plus frame. Never affects matchmaking, questions, rating or odds. |
-| **Accounts** | Email + password and Google via Supabase. In server mode the token is verified by the server. |
+| **Accounts** | Email + password via Supabase (Google can be added later). In server mode the token is verified by the server. |
+| **Usernames** | 3–16 characters, letters/numbers/underscores, must start with a letter, no reserved or offensive words (`src/engine/names.ts`). Unique across all players, case-insensitive, enforced by the server; the sign-up form checks availability as you type. |
 
 ## Project layout
 
@@ -88,7 +89,7 @@ npm run e2e         # needs `vite preview --port 4173` running for the UI part
 ## Accounts and cloud saves (Supabase)
 
 1. Create a project at https://supabase.com and run `supabase/schema.sql` in the SQL editor.
-2. Authentication → Providers: enable Email; for Google, add OAuth credentials and the redirect URLs (`http://localhost:5173`, your site).
+2. Authentication → Sign In / Providers: enable Email and, unless you connect a real mailer, turn **Confirm email** off. Add your site to Authentication → URL Configuration.
 3. Put `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env.local`; give the server `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
 
 Without the game server, signed-in players sync their profile JSON to `profiles.data` themselves (trusted-client). With the game server, the server is the only writer.
