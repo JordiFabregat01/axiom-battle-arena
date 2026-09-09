@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useReducer, useRef, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useReducer, useRef, useState, type ReactNode } from 'react';
 import { reducer, migrateProfile, isClientIntent, type Action, type ClientIntent, type Profile } from '../engine/profile';
 
 export * from '../engine/profile';
@@ -45,6 +45,8 @@ interface Store {
   storageKey: string;
   /** True when a server owns this profile (the browser only displays it). */
   authoritative: boolean;
+  /** Last rejection from the server for a client intent (e.g. "That name is already taken."). */
+  error: { message: string; id: number } | null;
 }
 const StoreContext = createContext<Store | null>(null);
 
@@ -59,6 +61,7 @@ interface ProviderProps {
 
 export function StoreProvider({ storageKey, children, remote, onChange }: ProviderProps) {
   const [profile, localDispatch] = useReducer(reducer, storageKey, loadProfile);
+  const [error, setError] = useState<{ message: string; id: number } | null>(null);
   const first = useRef(true);
   const remoteRef = useRef(remote);
   remoteRef.current = remote;
@@ -72,13 +75,15 @@ export function StoreProvider({ storageKey, children, remote, onChange }: Provid
   const dispatch = useCallback((action: Action) => {
     const r = remoteRef.current;
     if (r && isClientIntent(action)) {
-      r(action).then((p) => localDispatch({ type: 'load', profile: p })).catch((e) => console.warn('[server] rejected', action.type, e));
+      r(action)
+        .then((p) => localDispatch({ type: 'load', profile: p }))
+        .catch((e) => setError({ message: e instanceof Error ? e.message : 'The server rejected that', id: Date.now() }));
       return;
     }
     localDispatch(action);
   }, []);
 
-  return <StoreContext.Provider value={{ profile, dispatch, storageKey, authoritative: !!remote }}>{children}</StoreContext.Provider>;
+  return <StoreContext.Provider value={{ profile, dispatch, storageKey, authoritative: !!remote, error }}>{children}</StoreContext.Provider>;
 }
 
 export function useStore(): Store {

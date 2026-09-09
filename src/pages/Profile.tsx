@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link } from '../router';
+import { NameField, type NameState } from '../components/NameField';
 import { useProfile, totalGames, totalWins, ownedCount, storyCleared, isPlus } from '../state/store';
 import { rankFor, levelFromXp } from '../engine/ranking';
 import { TIERS, tierById } from '../engine/problems';
@@ -12,6 +13,8 @@ export function Profile() {
   const { profile, dispatch } = useProfile();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(profile.name);
+  const [nameState, setNameState] = useState<NameState>({ status: 'empty' });
+  const onNameState = useCallback((s: NameState) => setNameState(s), []);
   const rank = rankFor(profile.elo);
   const lvl = levelFromXp(profile.xp);
   const games = totalGames(profile);
@@ -32,9 +35,9 @@ export function Profile() {
         <div>
           <p className="eyebrow cool">{profile.titles.length ? profile.titles.join(' · ') : 'Competitor'} · since {since}{plus ? ' · Plus member' : ''}</p>
           {editing ? (
-            <form className="row" onSubmit={(e) => { e.preventDefault(); dispatch({ type: 'rename', name }); setEditing(false); }}>
-              <input className="text-input" style={{ width: 260 }} maxLength={20} value={name} onChange={(e) => setName(e.target.value)} autoFocus />
-              <button type="submit" className="btn btn-sm btn-chalk">Save</button>
+            <form className="row" style={{ alignItems: 'flex-start' }} onSubmit={(e) => { e.preventDefault(); if (nameState.status !== 'ok') return; dispatch({ type: 'rename', name: nameState.name }); setEditing(false); }}>
+              <div style={{ width: 300 }}><NameField value={name} onChange={setName} onState={onNameState} current={profile.name} id="rename" autoFocus /></div>
+              <button type="submit" className="btn btn-sm btn-chalk" disabled={nameState.status !== 'ok' || nameState.name === profile.name}>Save</button>
               <button type="button" className="btn btn-sm btn-ghost" onClick={() => { setEditing(false); setName(profile.name); }}>Cancel</button>
             </form>
           ) : (

@@ -14,6 +14,7 @@ import { SEASON, seasonTimeLeft, rewardForElo } from '../../src/engine/season';
 import { softReset } from '../../src/engine/ranking';
 import { questById, chapterReward } from '../../src/engine/story';
 import { generateChapterProblems } from '../../src/engine/wordProblems';
+import { validateName } from '../../src/engine/names';
 import type { ClientMessage, DuelMode } from '../../src/shared/protocol';
 
 export interface HubConfig extends AuthConfig {
@@ -97,6 +98,13 @@ export class Hub {
       case 'story_start': return this.storyStart(session, msg.questId, msg.chapterIndex, msg.reqId);
       case 'story_answer': return this.storyAnswer(session, msg.sessionId, msg.index, msg.value, msg.reqId);
       case 'ladder': session.send({ type: 'ladder', rows: await this.store.ladder(100), reqId: msg.reqId }); return;
+      case 'check_name': {
+        const v = validateName(String(msg.name ?? ''));
+        if (!v.ok) { session.send({ type: 'name_status', name: String(msg.name ?? ''), available: false, reason: v.reason, reqId: msg.reqId }); return; }
+        const taken = await this.store.nameTaken(v.name, session.userId);
+        session.send({ type: 'name_status', name: v.name, available: !taken, reason: taken ? 'That name is already taken.' : undefined, reqId: msg.reqId });
+        return;
+      }
       default: session.error('Unknown message');
     }
   }
@@ -120,6 +128,14 @@ export class Hub {
     session.send({ type: 'welcome', serverTime: Date.now(), profile, userId: identity.id, reqId: msg.reqId });
   }
 
+  /** A valid, unused username or an error to send back. */
+  private async claimName(raw: unknown, session: Session): Promise<string> {
+    const v = validateName(typeof raw === 'string' ? raw : '');
+    if (!v.ok) throw new Error(v.reason);
+    if (await this.store.nameTaken(v.name, session.userId)) throw new Error('That name is already taken.');
+    return v.name;
+  }
+
   /** Client intents are re-validated here; the reducer is the single source of rules. */
   private async intent(session: Session, action: ClientIntent, reqId: string) {
     const p = session.profile;
@@ -127,8 +143,7 @@ export class Hub {
     switch (action.type) {
       case 'create': {
         if (p) throw new Error('You already have a profile');
-        if (typeof action.name !== 'string' || !action.name.trim()) throw new Error('Pick a name');
-        next = createProfile(action.name, Number(action.placement));
+        next = createProfile(await this.claimName(action.name, session), Number(action.placement));
         break;
       }
       case 'setSpotlight':
@@ -136,8 +151,7 @@ export class Hub {
         next = reducer(p, { type: 'setSpotlight', ids: action.ids.slice(0, 16) });
         break;
       case 'rename':
-        if (typeof action.name !== 'string' || !action.name.trim()) throw new Error('Pick a name');
-        next = reducer(p, { type: 'rename', name: action.name });
+        next = reducer(p, { type: 'rename', name: await this.claimName(action.name, session) });
         break;
       case 'claimSeason': {
         if (!p) throw new Error('No profile');
@@ -156,8 +170,9 @@ export class Hub {
         if (!this.cfg.allowImport) throw new Error('Importing local saves is disabled on this server');
         const imported = migrateProfile(action.profile);
         if (!imported) throw new Error('That save could not be read');
-        // Entitlements are server-owned; a local save cannot bring them along.
-        next = { ...imported, plusUntil: null, plusClaims: [], coinGrantsApplied: 0, updatedAt: Date.now() };
+        // Entitlements are server-owned; a local save cannot bring them along. The name must follow the rules and be free.
+        const name = await this.claimName(imported.name, session);
+        next = { ...imported, name, plusUntil: null, plusClaims: [], coinGrantsApplied: 0, updatedAt: Date.now() };
         break;
       }
       default:

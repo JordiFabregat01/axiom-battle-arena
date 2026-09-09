@@ -1,24 +1,29 @@
-import { useState, type FormEvent } from 'react';
+import { useCallback, useState, type FormEvent } from 'react';
 import { TIERS } from '../engine/problems';
 import { STARTING_ELO, rankFor } from '../engine/ranking';
 import { useStore, WELCOME_COINS, loadProfile, type Profile } from '../state/store';
 import { useAuth } from '../cloud/auth';
 import { Link } from '../router';
+import { NameField, type NameState } from '../components/NameField';
 
 const GUEST_KEY = 'axiom-arena.profile.v2:guest';
 
 export function Onboarding() {
   const { dispatch, authoritative } = useStore();
   const { configured, user } = useAuth();
-  const [name, setName] = useState(user?.name ?? '');
+  void user;
+  const [name, setName] = useState('');
+  const [nameState, setNameState] = useState<NameState>({ status: 'empty' });
   const [placement, setPlacement] = useState(2);
   const [localSave] = useState<Profile | null>(() => (authoritative ? loadProfile(GUEST_KEY) : null));
   const rank = rankFor(STARTING_ELO);
+  const onNameState = useCallback((s: NameState) => setNameState(s), []);
+  const canSubmit = nameState.status === 'ok';
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
-    dispatch({ type: 'create', name, placement });
+    if (nameState.status !== 'ok') return;
+    dispatch({ type: 'create', name: nameState.name, placement });
   };
 
   return (
@@ -42,8 +47,8 @@ export function Onboarding() {
       )}
       <form className="stack" onSubmit={submit} style={{ gap: '1.4rem' }}>
         <div className="stack" style={{ gap: '0.5rem' }}>
-          <label className="eyebrow" htmlFor="name">Your arena name</label>
-          <input id="name" className="text-input" maxLength={20} placeholder="e.g. PrimeHunter" value={name} onChange={(e) => setName(e.target.value)} autoFocus autoComplete="off" />
+          <label className="eyebrow" htmlFor="name">Your username</label>
+          <NameField value={name} onChange={setName} onState={onNameState} autoFocus />
         </div>
         <div className="stack" style={{ gap: '0.6rem' }}>
           <p className="eyebrow">Your casual practice level</p>
@@ -62,7 +67,7 @@ export function Onboarding() {
           <p className="dim">
             Ranked starts at <b className="mono" style={{ color: 'var(--chalk)' }}>{STARTING_ELO}</b> · <b style={{ color: rank.tier.color }}>{rank.label}</b> for everyone. You get a welcome pack and {WELCOME_COINS} coins.
           </p>
-          <button className="btn btn-hot btn-lg" type="submit" disabled={!name.trim()}>Enter the arena →</button>
+          <button className="btn btn-hot btn-lg" type="submit" disabled={!canSubmit}>Enter the arena →</button>
         </div>
       </form>
       <p className="faint" style={{ fontSize: '0.8rem' }}>

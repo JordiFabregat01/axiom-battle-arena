@@ -15,6 +15,8 @@ export interface ProfileStore {
   save(userId: string, profile: Profile): Promise<void>;
   remove(userId: string): Promise<void>;
   ladder(limit: number): Promise<LadderRow[]>;
+  /** Is this name (case-insensitively) already used by someone other than `exceptUserId`? */
+  nameTaken(name: string, exceptUserId: string | null): Promise<boolean>;
 }
 
 const ladderRow = (id: string, p: Profile): LadderRow => ({ id, name: p.name, elo: p.elo, level: levelFromXp(p.xp).level, wins: totalWins(p) });
@@ -62,6 +64,11 @@ export class MemoryStore implements ProfileStore {
   async ladder(limit: number) {
     return [...this.profiles.entries()].map(([id, p]) => ladderRow(id, p)).sort((a, b) => b.elo - a.elo).slice(0, limit);
   }
+  async nameTaken(name: string, exceptUserId: string | null) {
+    const key = name.trim().toLowerCase();
+    for (const [id, p] of this.profiles) if (id !== exceptUserId && p.name.trim().toLowerCase() === key) return true;
+    return false;
+  }
 }
 
 /** Production store: Supabase with the service role key (bypasses row-level security). */
@@ -104,6 +111,16 @@ export class SupabaseStore implements ProfileStore {
     const { data, error } = await this.db.from('ladder').select('id, name, elo, level, wins').order('elo', { ascending: false }).limit(limit);
     if (error) throw new Error(`ladder failed: ${error.message}`);
     return (data ?? []) as LadderRow[];
+  }
+  async nameTaken(name: string, exceptUserId: string | null) {
+    // ilike without wildcards is an exact, case-insensitive match; underscores are escaped so they are not treated as wildcards.
+    const pattern = name.trim().replace(/[\\%_]/g, (c) => `\\${c}`);
+    for (const table of ['profiles', 'guest_profiles'] as const) {
+      const { data, error } = await this.db.from(table).select('id').ilike('name', pattern).limit(2);
+      if (error) throw new Error(`name check failed: ${error.message}`);
+      if ((data ?? []).some((r) => r.id !== exceptUserId)) return true;
+    }
+    return false;
   }
 }
 

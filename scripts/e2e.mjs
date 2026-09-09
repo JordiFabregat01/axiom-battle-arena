@@ -20,6 +20,7 @@ const UI_URL = process.env.E2E_UI_URL ?? 'http://localhost:4173';
 const SERVER_PORT = Number(process.env.E2E_SERVER_PORT ?? 8790);
 
 let failures = 0;
+const rnd = () => Math.random().toString(36).slice(2, 7);
 const ok = (name) => console.log(`  ✓ ${name}`);
 const fail = (name, detail) => { failures++; console.log(`  ✗ ${name}${detail ? ` — ${detail}` : ''}`); };
 const assert = (cond, name, detail) => (cond ? ok(name) : fail(name, detail));
@@ -38,7 +39,8 @@ async function testEscape() {
     await page.evaluate(() => localStorage.clear());
     await page.reload({ waitUntil: 'networkidle2' });
     await page.waitForSelector('#name');
-    await page.type('#name', 'EscapeTester');
+    await page.type('#name', `Esc${rnd()}`);
+    await page.waitForFunction(() => !document.querySelector('button[type=submit]')?.disabled, { timeout: 10000 });
     await page.click('button[type=submit]');
     await page.waitForSelector('.pack-chip');
     await page.click('.pack-chip');
@@ -123,7 +125,7 @@ async function testTamper() {
   c.send({ type: 'hello', guestId, reqId: 'h' });
   const welcome = await c.next((m) => m.type === 'welcome');
   assert(welcome.profile === null, 'new guest has no profile');
-  c.send({ type: 'intent', action: { type: 'create', name: 'Tamper', placement: 2 }, reqId: 'c' });
+  c.send({ type: 'intent', action: { type: 'create', name: `Tamper${rnd()}`, placement: 2 }, reqId: 'c' });
   const created = await c.next((m) => m.reqId === 'c');
   assert(created.profile?.elo === 1000, 'profile created at 1000 elo');
 
@@ -145,7 +147,7 @@ async function testTamper() {
   c.send({ type: 'open_pack', pack: 'premium', reqId: 'p' });
   const packRes = await c.next((m) => m.reqId === 'p');
   assert(packRes.type === 'error', 'cannot open a pack you do not own');
-  c.send({ type: 'intent', action: { type: 'rename', name: 'Still Tamper' }, reqId: 'r' });
+  c.send({ type: 'intent', action: { type: 'rename', name: `Still${rnd()}` }, reqId: 'r' });
   const after = await c.next((m) => m.reqId === 'r');
   assert(after.profile.elo === 1000 && after.profile.coins === 200 && Object.keys(after.profile.collection).length === 0 && after.profile.plusUntil === null, 'profile unchanged after all forgeries');
   c.close();
@@ -157,7 +159,7 @@ async function testDuel() {
   const c = await connect();
   c.send({ type: 'hello', guestId: `g-duel${Math.random().toString(36).slice(2, 12)}`, reqId: 'h' });
   await c.next((m) => m.type === 'welcome');
-  c.send({ type: 'intent', action: { type: 'create', name: 'Dueler', placement: 1 }, reqId: 'c' });
+  c.send({ type: 'intent', action: { type: 'create', name: `Dueler${rnd()}`, placement: 1 }, reqId: 'c' });
   await c.next((m) => m.reqId === 'c');
   c.send({ type: 'queue', mode: 'casual', tier: 1 });
   await c.next((m) => m.type === 'queued');

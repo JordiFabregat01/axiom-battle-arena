@@ -22,11 +22,13 @@ export const useArena = () => useContext(ArenaContext);
 interface Opening { pack: PackDef; cards: CardDef[]; newIds: string[]; }
 
 export function ArenaProvider({ children }: { children: ReactNode }) {
-  const { profile, dispatch, authoritative } = useStore();
+  const { profile, dispatch, authoritative, error } = useStore();
   const [opening, setOpening] = useState<Opening | null>(null);
   const [message, setMessage] = useState<{ text: string; id: number } | null>(null);
 
   const toast = useCallback((text: string) => setMessage({ text, id: Date.now() }), []);
+  // Server rejections of intents (bad name, name taken…) surface as toasts.
+  useEffect(() => { if (error) setMessage({ text: error.message, id: error.id }); }, [error]);
 
   /** Guest mode: roll here. Server mode: ask the server, which rolls and records. */
   const open = useCallback(async (id: PackId, buy: boolean): Promise<boolean> => {

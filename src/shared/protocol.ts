@@ -36,6 +36,7 @@ export type ClientMessage =
   | { type: 'story_start'; questId: string; chapterIndex: number; reqId: string }
   | { type: 'story_answer'; sessionId: string; index: number; value: number; reqId: string }
   | { type: 'ladder'; reqId: string }
+  | { type: 'check_name'; name: string; reqId: string }
   | { type: 'ping' };
 
 export type ServerMessage =
@@ -53,6 +54,7 @@ export type ServerMessage =
   | { type: 'story_result'; sessionId: string; index: number; correct: boolean; answer: number; explanation: string; reqId?: string }
   | { type: 'story_end'; sessionId: string; correct: number; stars: number; passed: boolean; first: boolean; reward: ChapterReward; profile: Profile }
   | { type: 'ladder'; rows: LadderRow[]; reqId?: string }
+  | { type: 'name_status'; name: string; available: boolean; reason?: string; reqId?: string }
   | { type: 'pong'; serverTime: number };
 
 export const DUEL_COUNTDOWN_MS = 3000;
