@@ -2,7 +2,13 @@
 // Usage: npm run check:deploy -- https://your-site.netlify.app https://your-server.up.railway.app
 import WebSocket from 'ws';
 
-const [site, server] = process.argv.slice(2).map((s) => (s ?? '').trim().replace(/\/+$/, ''));
+// Forgive common typos: a doubled scheme, a missing scheme, a trailing slash.
+const normalize = (s) => {
+  let u = (s ?? '').trim().replace(/\/+$/, '');
+  u = u.replace(/^(https?:\/\/)+/i, '');
+  return u ? `https://${u.replace(/^https?:\/\//i, '')}` : '';
+};
+const [site, server] = process.argv.slice(2).map(normalize);
 if (!site || !server) { console.error('usage: npm run check:deploy -- https://SITE https://SERVER'); process.exit(1); }
 
 let failed = 0;
