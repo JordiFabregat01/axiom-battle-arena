@@ -24,15 +24,15 @@ create policy "profiles readable by players"
 
 drop policy if exists "players insert own profile" on public.profiles;
 create policy "players insert own profile"
-  on public.profiles for insert to authenticated with check (auth.uid() = id);
+  on public.profiles for insert to authenticated with check ((select auth.uid()) = id);
 
 drop policy if exists "players update own profile" on public.profiles;
 create policy "players update own profile"
-  on public.profiles for update to authenticated using (auth.uid() = id) with check (auth.uid() = id);
+  on public.profiles for update to authenticated using ((select auth.uid()) = id) with check ((select auth.uid()) = id);
 
 -- Clients may never change entitlements; the service role (webhooks) may.
 create or replace function public.protect_entitlements()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql set search_path = '' as $
 begin
   if auth.role() = 'authenticated' then
     new.plus_until := old.plus_until;
@@ -67,7 +67,7 @@ alter table public.guest_profiles enable row level security;
 
 -- Public standings (no game data): accounts and guests together.
 drop view if exists public.ladder;
-create view public.ladder as
+create view public.ladder with (security_invoker = true) as
   select id::text as id, name, elo, level, wins from public.profiles
   union all
   select id, name, elo, level, wins from public.guest_profiles;
@@ -84,22 +84,22 @@ create table if not exists public.purchases (
 alter table public.purchases enable row level security;
 drop policy if exists "players see own purchases" on public.purchases;
 create policy "players see own purchases"
-  on public.purchases for select to authenticated using (auth.uid() = user_id);
+  on public.purchases for select to authenticated using ((select auth.uid()) = user_id);
 
 -- Helpers used by the webhook (service role only).
 create or replace function public.grant_coins(p_user uuid, p_amount integer)
-returns void language sql security definer as $$
+returns void language sql security definer set search_path = '' as $
   update public.profiles set coin_grants = coin_grants + p_amount where id = p_user;
 $$;
-revoke all on function public.grant_coins(uuid, integer) from public;
+revoke all on function public.grant_coins(uuid, integer) from public, anon, authenticated;
 grant execute on function public.grant_coins(uuid, integer) to service_role;
 
 create or replace function public.set_plus(p_user uuid, p_until timestamptz, p_customer text)
-returns void language sql security definer as $$
+returns void language sql security definer set search_path = '' as $
   update public.profiles
     set plus_until = greatest(coalesce(plus_until, p_until), p_until),
         stripe_customer_id = coalesce(p_customer, stripe_customer_id)
   where id = p_user;
 $$;
-revoke all on function public.set_plus(uuid, timestamptz, text) from public;
+revoke all on function public.set_plus(uuid, timestamptz, text) from public, anon, authenticated;
 grant execute on function public.set_plus(uuid, timestamptz, text) to service_role;
